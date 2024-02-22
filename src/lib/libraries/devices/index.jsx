@@ -58,6 +58,14 @@ import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyConnectionIconURL from './makeymakey/makeymakey-illustration.svg';
 import makeymakeyConnectionSmallIconURL from './makeymakey/makeymakey-small.svg';
 
+import roboProBotIconURL from './roboProBot/roboProBot.png';
+import roboProBotConnectionIconURL from './roboProBot/roboProBot-illustration.svg';
+import roboProBotConnectionSmallIconURL from './roboProBot/roboProBot-small.svg';
+
+import roboProStationIconURL from './roboProStation/roboProStation.png';
+import roboProStationConnectionIconURL from './roboProStation/roboProStation-illustration.svg';
+import roboProStationConnectionSmallIconURL from './roboProStation/roboProStation-small.svg';
+
 const deviceData = [
     /**
      * Unselect the deivce back to pure scratch mode
@@ -84,6 +92,80 @@ const deviceData = [
         programMode: ['realtime'],
         programLanguage: ['block'],
         tags: ['realtime']
+    },
+    {
+        name: 'roboPro Bot',
+        deviceId: 'roboProBot',
+        manufactor: 'arduino.cc',
+        learnMore: 'https://store.arduino.cc/usa/arduino-uno-rev3',
+        type: DeviceType.arduino,
+        iconURL: roboProBotIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="A great board to get started with electronics and coding."
+                description="Description for the Arduino Uno device"
+                id="gui.device.arduinoUno.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: true,
+        serialportRequired: false,
+        defaultBaudRate: '9600',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: roboProBotConnectionIconURL,
+        connectionSmallIconURL: roboProBotConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their device."
+                id="gui.device.arduinoUno.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: arduinoBaseToolBox,
+        programMode: ['realtime', 'upload'],
+        programLanguage: ['block', 'c', 'cpp'],
+        tags: ['arduino'],
+        helpLink: 'https://store.arduino.cc/usa/arduino-uno-rev3'
+    },
+    {
+        name: 'roboPro Station',
+        deviceId: 'roboProStation',
+        manufactor: 'arduino.cc',
+        learnMore: 'https://store.arduino.cc/usa/arduino-uno-rev3',
+        type: DeviceType.arduino,
+        iconURL: roboProStationIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="A great board to get started with electronics and coding."
+                description="Description for the Arduino Uno device"
+                id="gui.device.arduinoUno.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '9600',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: roboProStationConnectionIconURL,
+        connectionSmallIconURL: roboProStationConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their device."
+                id="gui.device.arduinoUno.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: arduinoBaseToolBox,
+        programMode: ['realtime', 'upload'],
+        programLanguage: ['block', 'c', 'cpp'],
+        tags: ['arduino'],
+        helpLink: 'https://store.arduino.cc/usa/arduino-uno-rev3'
     },
     {
         name: 'Arduino Uno',
@@ -589,7 +671,7 @@ const makeDeviceLibrary = (deviceList = null) => {
             // Because the micropython framework is not included in the community version,
             // for a control board that supports multiple programming frameworks, if it
             // also supports arduino, then we only load the arduino version of the device.
-            if ((typeof dev.typeList !== 'undefined') && (dev.deviceId.indexOf('arduino') !== -1)) {
+            if ((typeof dev.typeList !== 'undefined')) {
                 dev.hide = false;
             }
 
