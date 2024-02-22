@@ -114,7 +114,7 @@ jobs:
         run: npm run build
 
       - name: Get package main version
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/desktop' }}
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.1.0
 
