@@ -7,7 +7,7 @@ import bindAll from 'lodash.bindall';
 import bowser from 'bowser';
 import React from 'react';
 
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
@@ -529,7 +529,7 @@ class MenuBar extends React.Component {
                 <div className={styles.mainMenu}>
                     <div className={classNames(styles.menuBarItem)}>
                         <img
-                            alt="OpenBlock"
+                            alt="RoboPro"
                             className={classNames(styles.scratchLogo, {
                                 [styles.clickable]: typeof this.props.onClickLogo !== 'undefined'
                             })}

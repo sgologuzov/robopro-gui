@@ -5,7 +5,7 @@ import makeToolboxXML from '../lib/make-toolbox-xml';
 import PropTypes from 'prop-types';
 import React from 'react';
 import VMScratchBlocks from '../lib/blocks';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 import log from '../lib/log.js';
 import Prompt from './prompt.jsx';

@@ -4,7 +4,7 @@ import React from 'react';
 import configureStore from 'redux-mock-store';
 import {mount} from 'enzyme';
 import {LoadingState} from '../../../src/reducers/project-state';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 import projectSaverHOC from '../../../src/lib/project-saver-hoc.jsx';
 
@@ -18,7 +18,7 @@ describe('projectSaverHOC', () => {
             scratchGui: {
                 projectChanged: false,
                 projectState: {},
-                projectTitle: 'OpenBlock Project',
+                projectTitle: 'RoboPro Project',
                 timeout: {
                     autoSaveTimeoutId: null
                 }

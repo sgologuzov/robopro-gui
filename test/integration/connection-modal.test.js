@@ -14,7 +14,7 @@ const uri = path.resolve(__dirname, '../../build/index.html');
 
 let driver;
 
-// The tests below require OpenBlock Link to be unavailable, so we can trigger
+// The tests below require RoboPro Link to be unavailable, so we can trigger
 // an error modal. To make sure this is always true, we came up with the idea of
 // injecting javascript that overwrites the global Websocket object with one that
 // attempts to connect to a fake socket address.
@@ -32,7 +32,7 @@ describe('Hardware extension connection modal', () => {
         await driver.quit();
     });
 
-    test('Message saying OpenBlock Link is unavailable (BLE)', async () => {
+    test('Message saying RoboPro Link is unavailable (BLE)', async () => {
         await driver.quit();
         driver = getDriver();
 
@@ -44,13 +44,13 @@ describe('Hardware extension connection modal', () => {
 
         await clickText('micro:bit');
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for modal to open
-        findByText('OpenBlock Link'); // OpenBlock Link is mentioned in the error modal
+        findByText('RoboPro Link'); // RoboPro Link is mentioned in the error modal
 
         const logs = await getLogs();
         await expect(logs).toEqual([]);
     });
 
-    test('Message saying OpenBlock Link is unavailable (BT)', async () => {
+    test('Message saying RoboPro Link is unavailable (BT)', async () => {
         await loadUri(uri);
 
         await driver.executeScript(websocketFakeoutJs);
@@ -59,7 +59,7 @@ describe('Hardware extension connection modal', () => {
 
         await clickText('EV3');
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for modal to open
-        findByText('OpenBlock Link'); // OpenBlock Link is mentioned in the error modal
+        findByText('RoboPro Link'); // RoboPro Link is mentioned in the error modal
 
         const logs = await getLogs();
         await expect(logs).toEqual([]);

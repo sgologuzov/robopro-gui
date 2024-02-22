@@ -1,4 +1,4 @@
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 import storage from '../lib/storage';
 
 const SET_VM = 'scratch-gui/vm/SET_VM';

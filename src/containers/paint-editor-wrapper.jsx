@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 import PaintEditor from 'scratch-paint';
 import {inlineSvgFonts} from 'scratch-svg-renderer';
 

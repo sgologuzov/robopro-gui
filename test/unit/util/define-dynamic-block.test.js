@@ -1,6 +1,6 @@
 import defineDynamicBlock from '../../../src/lib/define-dynamic-block';
 
-import BlockType from 'openblock-vm/src/extension-support/block-type';
+import BlockType from 'robopro-vm/src/extension-support/block-type';
 
 const MockScratchBlocks = {
     OUTPUT_SHAPE_HEXAGONAL: 1,
