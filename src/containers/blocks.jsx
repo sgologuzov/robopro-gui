@@ -557,9 +557,7 @@ class Blocks extends React.Component {
         }, 0);
     }
     handleScratchExtensionRemoved (extensionInfo) {
-        const {deviceId} = extensionInfo;
-
-        if (deviceId) {
+        if (extensionInfo?.deviceId) {
             this.props.onDeviceSelected(null, null, null);
             this.props.vm.runtime.setRealtimeMode(true);
             this.props.onSetSupportSwitchMode(false);
