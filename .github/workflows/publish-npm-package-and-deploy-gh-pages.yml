@@ -95,16 +95,16 @@ jobs:
         run: |
           echo ::set-output name=modified::$(if [ -n "$(git status --porcelain)" ] && [ "$(git status --porcelain)" != " M package-lock.json" ]; then echo "true"; else echo "false"; fi)
 
-      - name: Update translations changes in GitHub repository
-        if: ${{ steps.git-check.outputs.modified == 'true' }}
-        id: git-push
-        run: |
-          git config --global user.name github-actions
-          git config --global user.email github-actions@github.com
-          git add .
-          git commit -m '[skip ci] Update translations from transifex'
-          git remote add origin-translation https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git push --set-upstream origin-translation develop
+      #- name: Update translations changes in GitHub repository
+      #  if: ${{ steps.git-check.outputs.modified == 'true' }}
+      #  id: git-push
+      #  run: |
+      #    git config --global user.name github-actions
+      #    git config --global user.email github-actions@github.com
+      #    git add .
+      #    git commit -m '[skip ci] Update translations from transifex'
+      #    git remote add origin-translation https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/$GITHUB_REPOSITORY
+      #    git push --set-upstream origin-translation develop
 
       - name: Build
         env:
