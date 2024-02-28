@@ -124,10 +124,9 @@ class LibraryItem extends React.PureComponent {
     }
     render () {
         const iconMd5 = this.curIconMd5();
-        const iconURL = iconMd5 ? (this.props.intl.locale === 'zh-cn' ?
-            `https://openblockcc.gitee.io/openblock-assets/assets/${iconMd5}` :
-            `https://openblockcc.github.io/openblock-assets/assets/${iconMd5}`
-        ) : this.props.iconRawURL;
+        const iconURL = iconMd5 ?
+            `https://openblockcc.github.io/openblock-assets/assets/${iconMd5}` :
+            this.props.iconRawURL;
         return (
             <LibraryItemComponent
                 author={this.props.author}
