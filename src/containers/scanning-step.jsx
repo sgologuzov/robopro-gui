@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
 import ScanningStepComponent from '../components/connection-modal/scanning-step.jsx';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 class ScanningStep extends React.Component {
     constructor (props) {

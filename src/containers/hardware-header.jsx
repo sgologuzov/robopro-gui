@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {injectIntl} from 'react-intl';
 
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 import {setStageSize} from '../reducers/stage-size';
 import {STAGE_SIZE_MODES} from '../lib/layout-constants';

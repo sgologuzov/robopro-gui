@@ -1,7 +1,14 @@
 {
-  "name": "openblock-gui",
-  "version": "0.1.0",
-  "description": "GraphicaL User Interface for creating and running OpenBlock projects",
+  "name": "robopro-gui",
+  "version": "0.1.1",
+  "description": "GraphicaL User Interface for creating and running RoboPro projects",
+  "author": "Massachusetts Institute of Technology",
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/sgologuzov/robopro-gui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sgologuzov/robopro-gui.git"
+  },
   "main": "./dist/scratch-gui.js",
   "scripts": {
     "build": "npm run clean && webpack --colors --bail",
@@ -17,13 +24,6 @@
     "test:unit": "",
     "test:smoke": "jest --runInBand test[\\\\/]smoke",
     "watch": "webpack --colors --watch"
-  },
-  "author": "Massachusetts Institute of Technology",
-  "license": "BSD-3-Clause",
-  "homepage": "https://github.com/openblockcc/openblock-gui#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/openblockcc/openblock-gui.git"
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^3.1.0",
@@ -59,7 +59,7 @@
     "openblock-blocks": "0.1.0-prerelease.20221010033401",
     "openblock-l10n": "^3.10.20221129143535",
     "openblock-save-svg-as-png": "^1.4.18",
-    "openblock-vm": "github:sgologuzov/robopro-vm#0.2.0-prerelease.20240222204005",
+    "robopro-vm": "^0.1.1",
     "papaparse": "5.3.0",
     "postcss-import": "^12.0.0",
     "postcss-loader": "^3.0.0",

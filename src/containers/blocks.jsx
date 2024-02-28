@@ -5,7 +5,7 @@ import makeToolboxXML from '../lib/make-toolbox-xml';
 import PropTypes from 'prop-types';
 import React from 'react';
 import VMScratchBlocks from '../lib/blocks';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 import log from '../lib/log.js';
 import Prompt from './prompt.jsx';
@@ -493,6 +493,8 @@ class Blocks extends React.Component {
                 if (dev.programMode.includes(defaultProgramMode)) {
                     if (defaultProgramMode === 'upload') {
                         this.props.vm.runtime.setRealtimeMode(false);
+                    } else {
+                        this.props.vm.runtime.setRealtimeMode(true);
                     }
                 }
 
@@ -557,9 +559,7 @@ class Blocks extends React.Component {
         }, 0);
     }
     handleScratchExtensionRemoved (extensionInfo) {
-        const {deviceId} = extensionInfo;
-
-        if (deviceId) {
+        if (extensionInfo && extensionInfo.deviceId) {
             this.props.onDeviceSelected(null, null, null);
             this.props.vm.runtime.setRealtimeMode(true);
             this.props.onSetSupportSwitchMode(false);

@@ -151,26 +151,26 @@ module.exports = [
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'gui'],
                 template: 'src/playground/index.ejs',
-                title: 'OpenBlock GUI',
+                title: 'RoboPro GUI',
                 sentryConfig: process.env.SENTRY_CONFIG ? '"' + process.env.SENTRY_CONFIG + '"' : null
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'blocksonly'],
                 template: 'src/playground/index.ejs',
                 filename: 'blocks-only.html',
-                title: 'OpenBlock GUI: Blocks Only Example'
+                title: 'RoboPro GUI: Blocks Only Example'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'compatibilitytesting'],
                 template: 'src/playground/index.ejs',
                 filename: 'compatibility-testing.html',
-                title: 'OpenBlock GUI: Compatibility Testing'
+                title: 'RoboPro GUI: Compatibility Testing'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'player'],
                 template: 'src/playground/index.ejs',
                 filename: 'player.html',
-                title: 'OpenBlock GUI: Player Example'
+                title: 'RoboPro GUI: Player Example'
             }),
             new CopyWebpackPlugin([{
                 from: 'static',
@@ -187,7 +187,7 @@ module.exports = [
             }]),
             new CopyWebpackPlugin([{
                 from: 'extension-worker.{js,js.map}',
-                context: 'node_modules/openblock-vm/dist/web'
+                context: 'node_modules/robopro-vm/dist/web'
             }])
         ])
     })
@@ -197,7 +197,7 @@ module.exports = [
         defaultsDeep({}, base, {
             target: 'web',
             entry: {
-                'openblock-gui': './src/index.js'
+                'robopro-gui': './src/index.js'
             },
             output: {
                 libraryTarget: 'umd',
@@ -227,7 +227,7 @@ module.exports = [
                 }]),
                 new CopyWebpackPlugin([{
                     from: 'extension-worker.{js,js.map}',
-                    context: 'node_modules/openblock-vm/dist/web'
+                    context: 'node_modules/robopro-vm/dist/web'
                 }]),
                 // Include library JSON files for scratch-desktop to use for downloading
                 new CopyWebpackPlugin([{

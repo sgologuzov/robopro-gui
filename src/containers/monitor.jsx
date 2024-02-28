@@ -13,7 +13,7 @@ import SliderPrompt from './slider-prompt.jsx';
 
 import {connect} from 'react-redux';
 import {Map} from 'immutable';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 const availableModes = opcode => (
     monitorModes.filter(t => {

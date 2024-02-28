@@ -1,7 +1,7 @@
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -66,15 +66,13 @@ class DeviceLibrary extends React.PureComponent {
 
     requestLoadDevice (device) {
         const id = device.deviceId;
-        const deviceType = device.type;
-        const pnpidList = device.pnpidList;
         const deviceExtensions = device.deviceExtensions;
 
         if (id && !device.disabled) {
             if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
                 this.props.onDeviceSelected(id);
             } else {
-                this.props.vm.extensionManager.loadDeviceURL(id, deviceType, pnpidList).then(() => {
+                this.props.vm.extensionManager.loadDeviceURL(device).then(() => {
                     this.props.vm.extensionManager.getDeviceExtensionsList().then(() => {
                         // TODO: Add a event for install device extension
                         // the large extensions will take many times to load
@@ -87,7 +85,10 @@ class DeviceLibrary extends React.PureComponent {
                         action: 'select device',
                         label: id
                     });
-                });
+                })
+                    .catch(err =>
+                        console.error(err) // eslint-disable-line no-console
+                    );
             }
         }
     }

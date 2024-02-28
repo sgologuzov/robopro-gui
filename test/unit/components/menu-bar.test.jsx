@@ -6,7 +6,7 @@ import {LoadingState} from '../../../src/reducers/project-state';
 
 import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 
 describe('MenuBar Component', () => {

@@ -1,7 +1,7 @@
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 import analytics from '../lib/analytics';
 
@@ -69,18 +69,31 @@ class ExtensionLibrary extends React.PureComponent {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'updateScratchExtensions',
             'updateDeviceExtensions',
             'handleItemSelect'
         ]);
         this.state = {
+            scratchExtensions: [],
             deviceExtensions: []
         };
     }
 
     componentDidMount () {
-        if (this.props.isRealtimeMode === false) {
+        if (this.props.isRealtimeMode) {
+            this.updateScratchExtensions();
+        } else {
             this.updateDeviceExtensions();
         }
+    }
+
+    updateScratchExtensions () {
+        this.props.vm.extensionManager.getExtensionsList(Object.assign([], extensionLibraryContent))
+            .then(data => {
+                if (data) {
+                    this.setState({scratchExtensions: data});
+                }
+            });
     }
 
     updateDeviceExtensions () {
@@ -103,10 +116,11 @@ class ExtensionLibrary extends React.PureComponent {
             }
             if (id && !item.disabled) {
                 if (this.props.vm.extensionManager.isExtensionLoaded(url)) {
-                    this.props.onCategorySelected(id);
+                    this.props.vm.extensionManager.unloadExtension(url);
+                    this.updateScratchExtensions();
                 } else {
                     this.props.vm.extensionManager.loadExtensionURL(url).then(() => {
-                        this.props.onCategorySelected(id);
+                        this.updateScratchExtensions();
                         analytics.event({
                             category: 'extensions',
                             action: 'select extension',
@@ -117,9 +131,8 @@ class ExtensionLibrary extends React.PureComponent {
             }
         } else if (id && !item.disabled) {
             if (this.props.vm.extensionManager.isDeviceExtensionLoaded(id)) {
-                this.props.vm.extensionManager.unloadDeviceExtension(id).then(() => {
-                    this.updateDeviceExtensions();
-                });
+                this.props.vm.extensionManager.unloadDeviceExtension(id);
+                this.updateDeviceExtensions();
             } else {
                 this.props.vm.extensionManager.loadDeviceExtension(id).then(() => {
                     this.updateDeviceExtensions();
@@ -131,7 +144,7 @@ class ExtensionLibrary extends React.PureComponent {
                 })
                     .catch(err => {
                         // TODO add a alet device extension load failed. and change the state to bar to failed state
-                        console.error(`err = ${err}`); // eslint-disable-line no-console
+                        console.error(err); // eslint-disable-line no-console
                     });
             }
         }
@@ -139,34 +152,36 @@ class ExtensionLibrary extends React.PureComponent {
     render () {
         let extensionLibraryThumbnailData = [];
         const device = this.props.deviceData.find(dev => dev.deviceId === this.props.deviceId);
-
-        if (this.props.isRealtimeMode) {
-            extensionLibraryThumbnailData = extensionLibraryContent.map(extension => ({
+        const filterAndSort = extensions => extensions.filter(extension => {
+            if (extension.supportDevice) {
+                return extension.supportDevice.includes(this.props.deviceId) ||
+                extension.supportDevice.includes(device.deviceExtensionsCompatible);
+            }
+            return true;
+        })
+            .map(extension => ({
                 rawURL: extension.iconURL || extensionIcon,
                 ...extension
-            }));
+            }))
+            .sort((a, b) => {
+                if ((b.isLoaded !== true) && (a.isLoaded === true)) return -1;
+                return 1;
+            });
+
+        if (this.props.isRealtimeMode) {
+            extensionLibraryThumbnailData = filterAndSort(this.state.scratchExtensions);
         } else {
-            extensionLibraryThumbnailData = this.state.deviceExtensions.filter(
-                extension => extension.supportDevice.includes(this.props.deviceId) ||
-                    extension.supportDevice.includes(device.deviceExtensionsCompatible))
-                .map(extension => ({
-                    rawURL: extension.iconURL || extensionIcon,
-                    ...extension
-                }))
-                .sort((a, b) => {
-                    if ((b.isLoaded !== true) && (a.isLoaded === true)) return -1;
-                    return 1;
-                });
+            extensionLibraryThumbnailData = filterAndSort(this.state.deviceExtensions);
         }
 
         return (
             <LibraryComponent
-                autoClose={this.props.isRealtimeMode}
+                autoClose={false}
                 data={extensionLibraryThumbnailData}
                 filterable
                 tags={this.props.isRealtimeMode ? [] : tagListPrefix}
                 id="extensionLibrary"
-                isUnloadble={!this.props.isRealtimeMode}
+                isUnloadble
                 title={this.props.intl.formatMessage(messages.extensionTitle)}
                 visible={this.props.visible}
                 onItemSelected={this.handleItemSelect}
@@ -181,7 +196,6 @@ ExtensionLibrary.propTypes = {
     deviceId: PropTypes.string,
     intl: intlShape.isRequired,
     isRealtimeMode: PropTypes.bool,
-    onCategorySelected: PropTypes.func,
     onRequestClose: PropTypes.func,
     visible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired // eslint-disable-line react/no-unused-prop-types

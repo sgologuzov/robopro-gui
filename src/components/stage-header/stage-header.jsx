@@ -3,7 +3,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import VM from 'openblock-vm';
+import VM from 'robopro-vm';
 
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
@@ -76,7 +76,7 @@ const StageHeaderComponent = function (props) {
                     target="_blank"
                 >
                     <img
-                        alt="OpenBlock"
+                        alt="RoboPro"
                         src={scratchLogo}
                     />
                 </a>

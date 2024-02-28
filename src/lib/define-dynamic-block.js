@@ -1,7 +1,7 @@
 // TODO: access `BlockType` and `ArgumentType` without reaching into VM
 // Should we move these into a new extension support module or something?
-import ArgumentType from 'openblock-vm/src/extension-support/argument-type';
-import BlockType from 'openblock-vm/src/extension-support/block-type';
+import ArgumentType from 'robopro-vm/src/extension-support/argument-type';
+import BlockType from 'robopro-vm/src/extension-support/block-type';
 
 /**
  * Define a block using extension info which has the ability to dynamically determine (and update) its layout.
