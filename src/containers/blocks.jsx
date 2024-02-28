@@ -493,6 +493,8 @@ class Blocks extends React.Component {
                 if (dev.programMode.includes(defaultProgramMode)) {
                     if (defaultProgramMode === 'upload') {
                         this.props.vm.runtime.setRealtimeMode(false);
+                    } else {
+                        this.props.vm.runtime.setRealtimeMode(true);
                     }
                 }
 
@@ -557,7 +559,7 @@ class Blocks extends React.Component {
         }, 0);
     }
     handleScratchExtensionRemoved (extensionInfo) {
-        if (extensionInfo?.deviceId) {
+        if (extensionInfo && extensionInfo.deviceId) {
             this.props.onDeviceSelected(null, null, null);
             this.props.vm.runtime.setRealtimeMode(true);
             this.props.onSetSupportSwitchMode(false);
