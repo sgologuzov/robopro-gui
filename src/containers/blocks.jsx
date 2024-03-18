@@ -541,7 +541,7 @@ class Blocks extends React.Component {
                 }
             };
 
-            // openblock-blocks implements a menu or custom field as a special kind of block ("shadow" block)
+            // robopro-blocks implements a menu or custom field as a special kind of block ("shadow" block)
             // these actually define blocks and MUST run regardless of the UI state
             defineBlocks(
                 Object.getOwnPropertyNames(categoryInfo.customFieldTypes)
@@ -669,7 +669,7 @@ class Blocks extends React.Component {
     /*
      * Pass along information about proposed name and variable options (scope and isCloud)
      * and additional potentially conflicting variable names from the VM
-     * to the variable validation prompt callback used in openblock-blocks.
+     * to the variable validation prompt callback used in robopro-blocks.
      */
     handlePromptCallback (input, variableOptions) {
         this.state.prompt.callback(
