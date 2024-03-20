@@ -1,4 +1,4 @@
-import ScratchBlocks from 'openblock-blocks';
+import ScratchBlocks from 'robopro-blocks';
 import iconv from 'iconv-lite';
 
 /**

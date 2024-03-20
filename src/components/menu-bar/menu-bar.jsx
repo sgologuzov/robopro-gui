@@ -1010,6 +1010,7 @@ MenuBar.propTypes = {
     onSetStageLarge: PropTypes.func.isRequired,
     deviceId: PropTypes.string,
     deviceName: PropTypes.string,
+    deviceNames: PropTypes.arrayOf(PropTypes.string),
     onDeviceIsEmpty: PropTypes.func
 };
 
@@ -1046,7 +1047,8 @@ const mapStateToProps = (state, ownProps) => {
         vm: state.scratchGui.vm,
         peripheralName: state.scratchGui.connectionModal.peripheralName,
         deviceId: state.scratchGui.device.deviceId,
-        deviceName: state.scratchGui.device.deviceName
+        deviceName: state.scratchGui.device.deviceName,
+        deviceNames: state.scratchGui.device.deviceName
     };
 };
 

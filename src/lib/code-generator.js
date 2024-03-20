@@ -1,5 +1,5 @@
-import 'openblock-blocks/arduino_compressed';
-import 'openblock-blocks/python_compressed';
+import 'robopro-blocks/arduino_compressed';
+import 'robopro-blocks/python_compressed';
 
 import {DeviceType} from './device';
 
