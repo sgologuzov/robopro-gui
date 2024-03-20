@@ -5,6 +5,9 @@ import log from '../../log';
 import {DeviceType} from '../../device';
 
 
+import arduinoBaseToolBox from './baseToolbox/arduino';
+import microbitBaseToolBox from './baseToolbox/microbit';
+
 import unselectDeviceIconURL from './unselectDevice/unselectDevice.png';
 
 import arduinoUnoIconURL from './arduinoUno/arduinoUno.png';
@@ -120,6 +123,7 @@ const deviceData = [
                 id="gui.device.arduinoUno.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -156,6 +160,7 @@ const deviceData = [
                 id="gui.device.arduinoUno.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -192,6 +197,7 @@ const deviceData = [
                 id="gui.device.arduinoUno.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -228,6 +234,7 @@ const deviceData = [
                 id="gui.device.arduinoNano.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -264,6 +271,7 @@ const deviceData = [
                 id="gui.device.arduinoLeonardo.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'], // due to the software serilport realtim mode is unstable
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -300,6 +308,7 @@ const deviceData = [
                 id="gui.device.arduinoMega2560.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -336,6 +345,7 @@ const deviceData = [
                 id="gui.device.esp32.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload', 'realtime'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -372,6 +382,7 @@ const deviceData = [
                 id="gui.device.esp8266NodeMCU.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         deviceExtensionsCompatible: 'arduinoEsp8266',
         programMode: ['upload'],
         programLanguage: ['block', 'c', 'cpp'],
@@ -409,6 +420,7 @@ const deviceData = [
                 id="gui.device.k210MaixDock.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -445,6 +457,7 @@ const deviceData = [
                 id="gui.device.k210Maixduino.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -481,6 +494,7 @@ const deviceData = [
                 id="gui.device.raspberryPiPicoIconURL.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -517,6 +531,7 @@ const deviceData = [
                 id="gui.device.microbit.connectingMessage"
             />
         ),
+        baseToolBoxXml: microbitBaseToolBox,
         programMode: ['upload'],
         programLanguage: ['block', 'microPython'],
         tags: ['microPython'],
@@ -553,6 +568,7 @@ const deviceData = [
                 id="gui.device.microbitV2.connectingMessage"
             />
         ),
+        baseToolBoxXml: microbitBaseToolBox,
         programMode: ['upload'],
         programLanguage: ['block', 'microPython'],
         tags: ['microPython'],
@@ -589,6 +605,7 @@ const deviceData = [
                 id="gui.device.makeyMakey.connectingMessage"
             />
         ),
+        baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
@@ -602,21 +619,24 @@ const deviceData = [
         type: DeviceType.arduino,
         featured: true,
         disabled: false,
-        hide: true
+        hide: true,
+        baseToolBoxXml: arduinoBaseToolBox
     },
     {
         deviceId: 'arduinoSE',
         type: DeviceType.arduino,
         featured: true,
         disabled: false,
-        hide: true
+        hide: true,
+        baseToolBoxXml: arduinoBaseToolBox
     },
     {
         deviceId: 'arduinoEsp8266',
         type: DeviceType.arduino,
         featured: true,
         disabled: false,
-        hide: true
+        hide: true,
+        baseToolBoxXml: arduinoBaseToolBox
     }
 ];
 
