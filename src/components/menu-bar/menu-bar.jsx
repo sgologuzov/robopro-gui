@@ -348,7 +348,7 @@ class MenuBar extends React.Component {
         }
     }
     handleConnectionMouseUp () {
-        if (this.props.deviceId) {
+        if (Object.keys(this.props.devices).length > 0) {
             this.props.onOpenConnectionModal();
         } else {
             this.props.onDeviceIsEmpty();
@@ -384,8 +384,8 @@ class MenuBar extends React.Component {
         }
     }
     handleUploadFirmware () {
-        if (this.props.deviceId) {
-            this.props.vm.uploadFirmwareToPeripheral(this.props.deviceId);
+        if (Object.keys(this.props.devices).length > 0) {
+            this.props.vm.uploadFirmwareToPeripheral(this.props.devices.id);
             this.props.onSetRealtimeConnection(false);
             this.props.onOpenUploadProgress();
         } else {
@@ -670,6 +670,21 @@ class MenuBar extends React.Component {
                         </MenuBarMenu>
                     </div>
                     <Divider className={classNames(styles.divider)} />
+                    {Object.values(this.props.devices).map(device => (
+                        <div
+                            key={device.deviceId}
+                            className={classNames(styles.menuBarItem, styles.hoverable)}
+                            onMouseUp={this.handleSelectDeviceMouseUp}
+                        >
+                            <img
+                                className={styles.deviceIcon}
+                                src={device.iconURL}
+                            />
+                            <div>
+                                {device.name}
+                            </div>
+                        </div>
+                    ))}
                     <div
                         className={classNames(styles.menuBarItem, styles.hoverable)}
                         onMouseUp={this.handleSelectDeviceMouseUp}
@@ -678,18 +693,11 @@ class MenuBar extends React.Component {
                             className={styles.deviceIcon}
                             src={deviceIcon}
                         />
-                        {
-                            this.props.deviceName ? (
-                                <div>
-                                    {this.props.deviceName}
-                                </div>
-                            ) : (
-                                <FormattedMessage
-                                    defaultMessage="No device selected"
-                                    description="Text for menubar no device select button"
-                                    id="gui.menuBar.noDeviceSelected"
-                                />
-                            )}
+                        <FormattedMessage
+                            defaultMessage="Connect new device"
+                            description="Connect new device"
+                            id="gui.menuBar.connectNewDevice"
+                        />
                     </div>
                     <Divider className={classNames(styles.divider)} />
                     <div
@@ -1008,9 +1016,7 @@ MenuBar.propTypes = {
     onWorkspaceIsNotEmpty: PropTypes.func.isRequired,
     onOpenDeviceLibrary: PropTypes.func,
     onSetStageLarge: PropTypes.func.isRequired,
-    deviceId: PropTypes.string,
-    deviceName: PropTypes.string,
-    deviceNames: PropTypes.arrayOf(PropTypes.string),
+    devices: PropTypes.objectOf(PropTypes.object),
     onDeviceIsEmpty: PropTypes.func
 };
 
@@ -1046,9 +1052,7 @@ const mapStateToProps = (state, ownProps) => {
         stageSizeMode: state.scratchGui.stageSize.stageSize,
         vm: state.scratchGui.vm,
         peripheralName: state.scratchGui.connectionModal.peripheralName,
-        deviceId: state.scratchGui.device.deviceId,
-        deviceName: state.scratchGui.device.deviceName,
-        deviceNames: state.scratchGui.device.deviceName
+        devices: state.scratchGui.devices
     };
 };
 

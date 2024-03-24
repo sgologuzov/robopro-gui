@@ -31,6 +31,7 @@ import programModeReducer, {programModeInitialState} from './program-mode';
 import codeReducer, {codeInitialState} from './code';
 import deviceReducer, {deviceInitialState} from './device';
 import deviceDataReducer, {deviceDataInitialState} from './device-data';
+import devicesReducer, {devicesInitialState} from './devices';
 import hardwareConsoleReducer, {hardwareConsoleInitialState} from './hardware-console';
 import updateReducer, {updateInitialState} from './update';
 
@@ -49,6 +50,7 @@ const guiInitialState = {
     customProcedures: customProceduresInitialState,
     device: deviceInitialState,
     deviceData: deviceDataInitialState,
+    devices: devicesInitialState,
     hardwareConsole: hardwareConsoleInitialState,
     editorTab: editorTabInitialState,
     mode: modeInitialState,
@@ -154,6 +156,7 @@ const guiReducer = combineReducers({
     customProcedures: customProceduresReducer,
     device: deviceReducer,
     deviceData: deviceDataReducer,
+    devices: devicesReducer,
     editorTab: editorTabReducer,
     mode: modeReducer,
     hardwareConsole: hardwareConsoleReducer,

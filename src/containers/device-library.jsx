@@ -66,20 +66,22 @@ class DeviceLibrary extends React.PureComponent {
 
     requestLoadDevice (device) {
         const id = device.deviceId;
+        const deviceType = device.type;
+        const pnpidList = device.pnpidList;
         const deviceExtensions = device.deviceExtensions;
 
         if (id && !device.disabled) {
             if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
-                this.props.onDeviceSelected(id);
+                this.props.onDeviceSelected(device);
             } else {
-                this.props.vm.extensionManager.loadDeviceURL(device).then(() => {
+                this.props.vm.extensionManager.loadDeviceURL(id, deviceType, pnpidList).then(() => {
                     this.props.vm.extensionManager.getDeviceExtensionsList().then(() => {
                         // TODO: Add a event for install device extension
                         // the large extensions will take many times to load
                         // A loading interface should be launched.
                         this.props.vm.installDeviceExtensions(Object.assign([], deviceExtensions));
                     });
-                    this.props.onDeviceSelected(id);
+                    this.props.onDeviceSelected(device);
                     analytics.event({
                         category: 'devices',
                         action: 'select device',
