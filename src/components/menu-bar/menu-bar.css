@@ -290,6 +290,10 @@
     vertical-align: middle;
 }
 
+.collapsible-label {
+    margin: 0 .5rem 0 .25rem;
+}
+
 .program-mode-group {
     padding-right: 2rem;
     padding-left: 2rem;

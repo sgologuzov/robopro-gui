@@ -759,7 +759,6 @@ const makeToolboxXML = function (isInitialSetup, devices = null, isStage = true,
 
     let everything = [xmlOpen];
 
-    console.log('[makeToolboxXML] devices:', devices);
     if (devices && Object.keys(devices).length > 0) {
         const device = devices[Object.keys(devices)[0]];
         const baseToolboxXml = device.baseToolBoxXml(isInitialSetup, isStage, targetId, isRealtimeMode,

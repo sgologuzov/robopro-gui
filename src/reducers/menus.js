@@ -1,3 +1,5 @@
+const ADD_MENU = 'scratch-gui/menus/ADD_MENU';
+const REMOVE_MENU = 'scratch-gui/menus/REMOVE_MENU';
 const OPEN_MENU = 'scratch-gui/menus/OPEN_MENU';
 const CLOSE_MENU = 'scratch-gui/menus/CLOSE_MENU';
 
@@ -25,6 +27,16 @@ const initialState = {
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
+    case ADD_MENU: {
+        return Object.assign({}, state, {
+            [action.menu]: false
+        });
+    }
+    case REMOVE_MENU: {
+        const newState = Object.assign({}, state);
+        delete newState[action.menu];
+        return newState;
+    }
     case OPEN_MENU:
         return Object.assign({}, state, {
             [action.menu]: true
@@ -51,6 +63,9 @@ const aboutMenuOpen = state => state.scratchGui.menus[MENU_ABOUT];
 const openAccountMenu = () => openMenu(MENU_ACCOUNT);
 const closeAccountMenu = () => closeMenu(MENU_ACCOUNT);
 const accountMenuOpen = state => state.scratchGui.menus[MENU_ACCOUNT];
+const openDeviceMenu = menu => openMenu(menu);
+const closeDeviceMenu = menu => closeMenu(menu);
+const deviceMenuOpen = (state, menu) => state.scratchGui.menus[menu];
 const openFileMenu = () => openMenu(MENU_FILE);
 const closeFileMenu = () => closeMenu(MENU_FILE);
 const fileMenuOpen = state => state.scratchGui.menus[MENU_FILE];
@@ -79,6 +94,9 @@ export {
     openAccountMenu,
     closeAccountMenu,
     accountMenuOpen,
+    openDeviceMenu,
+    closeDeviceMenu,
+    deviceMenuOpen,
     openFileMenu,
     closeFileMenu,
     fileMenuOpen,

@@ -7,6 +7,7 @@ import analytics from '../lib/analytics';
 import {connect} from 'react-redux';
 import {closeConnectionModal} from '../reducers/modals';
 import {setConnectionModalPeripheralName, setListAll} from '../reducers/connection-modal';
+import {setPeripheralName} from '../reducers/devices';
 
 class ConnectionModal extends React.Component {
     constructor (props) {
@@ -103,7 +104,7 @@ class ConnectionModal extends React.Component {
             action: 'connected',
             label: this.props.deviceId
         });
-        this.props.onConnected(this.state.peripheralName);
+        this.props.onConnected(this.props.deviceId, this.state.peripheralName);
     }
     handleHelp () {
         window.open(this.state.device.helpLink, '_blank');
@@ -165,7 +166,8 @@ const mapDispatchToProps = dispatch => ({
     onCancel: () => {
         dispatch(closeConnectionModal());
     },
-    onConnected: peripheralName => {
+    onConnected: (deviceId, peripheralName) => {
+        dispatch(setPeripheralName(deviceId, peripheralName));
         dispatch(setConnectionModalPeripheralName(peripheralName));
     },
     onClickListAll: state => {

@@ -481,28 +481,33 @@ class Blocks extends React.Component {
                 this.props.onSetBaudrate(dev.defaultBaudRate);
             }
 
+            const noExtraDevices = Object.keys(this.props.devices).length === 0;
             const supportUploadMode = dev.programMode.includes('upload');
             const supportRealtimeMode = dev.programMode.includes('realtime');
 
             // eslint-disable-next-line no-negated-condition
-            if (supportUploadMode && supportRealtimeMode) {
-                this.props.onSetSupportSwitchMode(true);
+            if (noExtraDevices) {
+                if (supportUploadMode && supportRealtimeMode) {
+                    this.props.onSetSupportSwitchMode(true);
 
-                const defaultProgramMode = dev.defaultProgramMode;
-                if (dev.programMode.includes(defaultProgramMode)) {
-                    if (defaultProgramMode === 'upload') {
+                    const defaultProgramMode = dev.defaultProgramMode;
+                    if (dev.programMode.includes(defaultProgramMode)) {
+                        if (defaultProgramMode === 'upload') {
+                            this.props.vm.runtime.setRealtimeMode(false);
+                        } else {
+                            this.props.vm.runtime.setRealtimeMode(true);
+                        }
+                    }
+                } else {
+                    if (supportUploadMode) {
                         this.props.vm.runtime.setRealtimeMode(false);
                     } else {
                         this.props.vm.runtime.setRealtimeMode(true);
                     }
+                    this.props.onSetSupportSwitchMode(false);
                 }
-
             } else {
-                if (supportUploadMode) {
-                    this.props.vm.runtime.setRealtimeMode(false);
-                } else {
-                    this.props.vm.runtime.setRealtimeMode(true);
-                }
+                this.props.vm.runtime.setRealtimeMode(true);
                 this.props.onSetSupportSwitchMode(false);
             }
 
@@ -569,7 +574,6 @@ class Blocks extends React.Component {
         }
     }
     handleDeviceExtensionAdded (deviceExtensionsRegister) {
-        console.log('[handleDeviceExtensionAdded]');
         if (deviceExtensionsRegister.defineMessages) {
             this.ScratchBlocks = deviceExtensionsRegister.defineMessages(this.ScratchBlocks);
         }
@@ -588,7 +592,6 @@ class Blocks extends React.Component {
         }
     }
     handleDeviceExtensionRemoved () {
-        console.log('[handleDeviceExtensionRemoved]');
         const toolboxXML = this.getToolboxXML();
         if (toolboxXML) {
             this.props.updateToolboxState(toolboxXML);
@@ -609,7 +612,6 @@ class Blocks extends React.Component {
         });
     }
     handleDeviceSelected (device) {
-        console.log('[handleDeviceSelected] device:', device);
         if (device && device.launchPeripheralConnectionFlow) {
             this.handleConnectionModalStart();
         }
@@ -642,8 +644,11 @@ class Blocks extends React.Component {
     workspaceToCode () {
         let code;
         try {
-            const generatorName = getGeneratorNameFromDeviceType(this.props.deviceType);
-            code = this.ScratchBlocks[generatorName].workspaceToCode(this.workspace);
+            if (this.props.devices && Object.keys(this.props.devices).length > 0) {
+                const device = this.props.devices[Object.keys(this.props.devices)[0]];
+                const generatorName = getGeneratorNameFromDeviceType(device.type);
+                code = this.ScratchBlocks[generatorName].workspaceToCode(this.workspace);
+            }
         } catch (e) {
             code = e.message;
         }
@@ -704,7 +709,6 @@ class Blocks extends React.Component {
             deviceData,
             devices,
             deviceLibraryVisible,
-            peripheralName,
             extensionLibraryVisible,
             options,
             stageSize,
@@ -788,7 +792,6 @@ Blocks.propTypes = {
     customProceduresVisible: PropTypes.bool,
     deviceData: PropTypes.instanceOf(Array).isRequired,
     devices: PropTypes.objectOf(PropTypes.object),
-    peripheralName: PropTypes.string,
     deviceLibraryVisible: PropTypes.bool,
     extensionLibraryVisible: PropTypes.bool,
     isCodeEditorLocked: PropTypes.bool.isRequired,
@@ -889,7 +892,6 @@ const mapStateToProps = state => ({
     ),
     deviceData: state.scratchGui.deviceData.deviceData,
     devices: state.scratchGui.devices,
-    peripheralName: state.scratchGui.connectionModal.peripheralName,
     deviceLibraryVisible: state.scratchGui.modals.deviceLibrary,
     extensionLibraryVisible: state.scratchGui.modals.extensionLibrary,
     isCodeEditorLocked: state.scratchGui.code.isCodeEditorLocked,
