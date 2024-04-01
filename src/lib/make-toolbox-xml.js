@@ -723,7 +723,7 @@ const xmlClose = '</xml>';
 /**
  * @param {!boolean} isInitialSetup - Whether the toolbox is for initial setup. If the mode is "initial setup",
  * blocks with localized default parameters (e.g. ask and wait) should not be loaded. (LLK/scratch-gui#5445)
- * @param {?object} device - Full data of current selected deivce.
+ * @param {?object} devices - Full data of current selected deivces.
  * @param {?boolean} isStage - Whether the toolbox is for a stage-type target. This is always set to true
  * when isInitialSetup is true.
  * @param {?string} targetId - The current editing target
@@ -737,7 +737,7 @@ const xmlClose = '</xml>';
  * @param {?string} soundName -  The name of the default selected sound dropdown.
  * @returns {string} - a ScratchBlocks-style XML document for the contents of the toolbox.
  */
-const makeToolboxXML = function (isInitialSetup, device = null, isStage = true, targetId, categoriesXML = [],
+const makeToolboxXML = function (isInitialSetup, devices = null, isStage = true, targetId, categoriesXML = [],
     isRealtimeMode = true,
     costumeName = '', backdropName = '', soundName = '') {
     isStage = isInitialSetup || isStage;
@@ -759,10 +759,10 @@ const makeToolboxXML = function (isInitialSetup, device = null, isStage = true, 
 
     let everything = [xmlOpen];
 
-    if (device) {
+    if (devices && Object.keys(devices).length > 0) {
+        const device = devices[Object.keys(devices)[0]];
         const baseToolboxXml = device.baseToolBoxXml(isInitialSetup, isStage, targetId, isRealtimeMode,
             costumeName, backdropName, soundName);
-
         everything = everything.concat(baseToolboxXml);
     } else {
         const motionXML = moveCategory('motion') || motion(isInitialSetup, isStage, targetId);

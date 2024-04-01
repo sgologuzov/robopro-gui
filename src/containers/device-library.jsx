@@ -70,7 +70,7 @@ class DeviceLibrary extends React.PureComponent {
 
         if (id && !device.disabled) {
             if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
-                this.props.onDeviceSelected(id);
+                this.props.onDeviceSelected(device);
             } else {
                 this.props.vm.extensionManager.loadDeviceURL(device).then(() => {
                     this.props.vm.extensionManager.getDeviceExtensionsList().then(() => {
@@ -79,7 +79,7 @@ class DeviceLibrary extends React.PureComponent {
                         // A loading interface should be launched.
                         this.props.vm.installDeviceExtensions(Object.assign([], deviceExtensions));
                     });
-                    this.props.onDeviceSelected(id);
+                    this.props.onDeviceSelected(device);
                     analytics.event({
                         category: 'devices',
                         action: 'select device',

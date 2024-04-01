@@ -30,6 +30,7 @@ import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/
 import {updateMetrics} from '../reducers/workspace-metrics';
 import {setCodeEditorValue} from '../reducers/code';
 import {setDeviceId, setDeviceName, setDeviceType} from '../reducers/device';
+import {addDevice} from '../reducers/devices';
 import {setSupportSwitchMode} from '../reducers/program-mode';
 import {setBaudrate} from '../reducers/hardware-console';
 
@@ -412,9 +413,7 @@ class Blocks extends React.Component {
             const targetSounds = target.getSounds();
             const dynamicBlocksXML = this.props.vm.runtime.getBlocksXML(target);
 
-            const device = this.props.deviceData.find(item => item.deviceId === this.props.deviceId);
-
-            return makeToolboxXML(false, device, target.isStage, target.id, dynamicBlocksXML,
+            return makeToolboxXML(false, this.props.devices, target.isStage, target.id, dynamicBlocksXML,
                 this.props.isRealtimeMode,
                 targetCostumes[targetCostumes.length - 1].name,
                 stageCostumes[stageCostumes.length - 1].name,
@@ -476,34 +475,39 @@ class Blocks extends React.Component {
 
         if (deviceId) {
             const dev = this.props.deviceData.find(ext => ext.deviceId === deviceId);
-            this.props.onDeviceSelected(dev.deviceId, dev.name, dev.type);
+            this.props.onDeviceSelected(dev);
             this.ScratchBlocks.Device.setDevice(dev.deviceId, dev.type);
             if (dev.defaultBaudRate) {
                 this.props.onSetBaudrate(dev.defaultBaudRate);
             }
 
+            const noExtraDevices = Object.keys(this.props.devices).length === 0;
             const supportUploadMode = dev.programMode.includes('upload');
             const supportRealtimeMode = dev.programMode.includes('realtime');
 
             // eslint-disable-next-line no-negated-condition
-            if (supportUploadMode && supportRealtimeMode) {
-                this.props.onSetSupportSwitchMode(true);
+            if (noExtraDevices) {
+                if (supportUploadMode && supportRealtimeMode) {
+                    this.props.onSetSupportSwitchMode(true);
 
-                const defaultProgramMode = dev.defaultProgramMode;
-                if (dev.programMode.includes(defaultProgramMode)) {
-                    if (defaultProgramMode === 'upload') {
+                    const defaultProgramMode = dev.defaultProgramMode;
+                    if (dev.programMode.includes(defaultProgramMode)) {
+                        if (defaultProgramMode === 'upload') {
+                            this.props.vm.runtime.setRealtimeMode(false);
+                        } else {
+                            this.props.vm.runtime.setRealtimeMode(true);
+                        }
+                    }
+                } else {
+                    if (supportUploadMode) {
                         this.props.vm.runtime.setRealtimeMode(false);
                     } else {
                         this.props.vm.runtime.setRealtimeMode(true);
                     }
+                    this.props.onSetSupportSwitchMode(false);
                 }
-
             } else {
-                if (supportUploadMode) {
-                    this.props.vm.runtime.setRealtimeMode(false);
-                } else {
-                    this.props.vm.runtime.setRealtimeMode(true);
-                }
+                this.props.vm.runtime.setRealtimeMode(true);
                 this.props.onSetSupportSwitchMode(false);
             }
 
@@ -560,7 +564,7 @@ class Blocks extends React.Component {
     }
     handleScratchExtensionRemoved (extensionInfo) {
         if (extensionInfo && extensionInfo.deviceId) {
-            this.props.onDeviceSelected(null, null, null);
+            this.props.onDeviceSelected(null);
             this.props.vm.runtime.setRealtimeMode(true);
             this.props.onSetSupportSwitchMode(false);
         }
@@ -607,15 +611,12 @@ class Blocks extends React.Component {
             this.workspace.toolbox_.setSelectedCategoryById(categoryId);
         });
     }
-    handleDeviceSelected (categoryId) {
-        const device = this.props.deviceData.find(ext => ext.deviceId === categoryId);
-
+    handleDeviceSelected (device) {
         if (device && device.launchPeripheralConnectionFlow) {
             this.handleConnectionModalStart();
         }
-
         this.withToolboxUpdates(() => {
-            this.workspace.toolbox_.setSelectedCategoryById(categoryId);
+            this.workspace.toolbox_.setSelectedCategoryById(device.deviceId);
         });
     }
     setBlocks (blocks) {
@@ -643,8 +644,11 @@ class Blocks extends React.Component {
     workspaceToCode () {
         let code;
         try {
-            const generatorName = getGeneratorNameFromDeviceType(this.props.deviceType);
-            code = this.ScratchBlocks[generatorName].workspaceToCode(this.workspace);
+            if (this.props.devices && Object.keys(this.props.devices).length > 0) {
+                const device = this.props.devices[Object.keys(this.props.devices)[0]];
+                const generatorName = getGeneratorNameFromDeviceType(device.type);
+                code = this.ScratchBlocks[generatorName].workspaceToCode(this.workspace);
+            }
         } catch (e) {
             code = e.message;
         }
@@ -703,10 +707,8 @@ class Blocks extends React.Component {
             canUseCloud,
             customProceduresVisible,
             deviceData,
-            deviceId,
+            devices,
             deviceLibraryVisible,
-            deviceType,
-            peripheralName,
             extensionLibraryVisible,
             options,
             stageSize,
@@ -789,9 +791,7 @@ Blocks.propTypes = {
     canUseCloud: PropTypes.bool,
     customProceduresVisible: PropTypes.bool,
     deviceData: PropTypes.instanceOf(Array).isRequired,
-    deviceId: PropTypes.string,
-    deviceType: PropTypes.string,
-    peripheralName: PropTypes.string,
+    devices: PropTypes.objectOf(PropTypes.object),
     deviceLibraryVisible: PropTypes.bool,
     extensionLibraryVisible: PropTypes.bool,
     isCodeEditorLocked: PropTypes.bool.isRequired,
@@ -891,9 +891,7 @@ const mapStateToProps = state => ({
         state.scratchGui.mode.isFullScreen
     ),
     deviceData: state.scratchGui.deviceData.deviceData,
-    deviceId: state.scratchGui.device.deviceId,
-    deviceType: state.scratchGui.device.deviceType,
-    peripheralName: state.scratchGui.connectionModal.peripheralName,
+    devices: state.scratchGui.devices,
     deviceLibraryVisible: state.scratchGui.modals.deviceLibrary,
     extensionLibraryVisible: state.scratchGui.modals.extensionLibrary,
     isCodeEditorLocked: state.scratchGui.code.isCodeEditorLocked,
@@ -909,10 +907,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onActivateColorPicker: callback => dispatch(activateColorPicker(callback)),
     onActivateCustomProcedures: (data, callback) => dispatch(activateCustomProcedures(data, callback)),
-    onDeviceSelected: (id, name, type) => {
-        dispatch(setDeviceId(id));
-        dispatch(setDeviceName(name));
-        dispatch(setDeviceType(type));
+    onDeviceSelected: device => {
+        dispatch(addDevice(device));
+        dispatch(setDeviceId(device.deviceId));
+        dispatch(setDeviceName(device.name));
+        dispatch(setDeviceType(device.type));
     },
     onOpenConnectionModal: () => {
         dispatch(openConnectionModal());
