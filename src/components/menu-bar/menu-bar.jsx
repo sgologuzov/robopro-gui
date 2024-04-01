@@ -11,6 +11,7 @@ import VM from 'robopro-vm';
 
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
+import DeviceMenu from './device-menu.jsx';
 import CommunityButton from './community-button.jsx'; // eslint-disable-line no-unused-vars
 import ShareButton from './share-button.jsx'; // eslint-disable-line no-unused-vars
 import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
@@ -33,9 +34,7 @@ import {UPDATE_MODAL_STATE} from '../../lib/update-state.js';
 
 import {
     openTipsLibrary,
-    openUploadProgress,
     openUpdateModal,
-    openConnectionModal,
     openDeviceLibrary
 } from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
@@ -100,14 +99,12 @@ import sharedMessages from '../../lib/shared-messages';
 import Switch from 'react-switch';
 
 import deviceIcon from './icon--device.svg';
-import unconnectedIcon from './icon--unconnected.svg';
-import connectedIcon from './icon--connected.svg';
 import screenshotIcon from './icon--screenshot.svg';
 import settingIcon from './icon--setting.svg';
 
-import uploadFirmwareIcon from './icon--upload-firmware.svg';
 import saveSvgAsPng from 'openblock-save-svg-as-png';
 import {showAlertWithTimeout} from '../../reducers/alerts';
+import {clearPeripheralName} from '../../reducers/devices';
 
 const ariaMessages = defineMessages({
     language: {
@@ -211,13 +208,12 @@ class MenuBar extends React.Component {
             'handleClickSaveAsCopy',
             'handleClickSeeCommunity',
             'handleClickShare',
+            'handleDisconnected',
             'handleKeyPress',
             'handleLanguageMouseUp',
             'handleRestoreOption',
             'getSaveToComputerHandler',
             'restoreOptionMessage',
-            'handleConnectionMouseUp',
-            'handleUploadFirmware',
             'handleSelectDeviceMouseUp',
             'handleProgramModeSwitchOnChange',
             'handleProgramModeUpdate',
@@ -228,12 +224,12 @@ class MenuBar extends React.Component {
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);
-        this.props.vm.on('PERIPHERAL_DISCONNECTED', this.props.onDisconnect);
+        this.props.vm.on('PERIPHERAL_DISCONNECTED', this.handleDisconnected);
         this.props.vm.on('PROGRAM_MODE_UPDATE', this.handleProgramModeUpdate);
     }
     componentWillUnmount () {
         document.removeEventListener('keydown', this.handleKeyPress);
-        this.props.vm.removeListener('PERIPHERAL_DISCONNECTED', this.props.onDisconnect);
+        this.props.vm.removeListener('PERIPHERAL_DISCONNECTED', this.handleDisconnected);
         this.props.vm.removeListener('PROGRAM_MODE_UPDATE', this.handleProgramModeUpdate);
     }
     handleClickNew () {
@@ -347,13 +343,6 @@ class MenuBar extends React.Component {
         }
         }
     }
-    handleConnectionMouseUp () {
-        if (this.props.deviceId) {
-            this.props.onOpenConnectionModal();
-        } else {
-            this.props.onDeviceIsEmpty();
-        }
-    }
     handleSelectDeviceMouseUp () {
         const blocks = document.querySelector('.blocklyWorkspace .blocklyBlockCanvas');
         if (blocks.getBBox().height === 0) {
@@ -383,15 +372,7 @@ class MenuBar extends React.Component {
             this.props.onSetUploadMode();
         }
     }
-    handleUploadFirmware () {
-        if (this.props.deviceId) {
-            this.props.vm.uploadFirmwareToPeripheral(this.props.deviceId);
-            this.props.onSetRealtimeConnection(false);
-            this.props.onOpenUploadProgress();
-        } else {
-            this.props.onNoPeripheralIsConnected();
-        }
-    }
+
     handleScreenshot () {
         const blocks = document.querySelector('.blocklyWorkspace .blocklyBlockCanvas');
         if (blocks.getBBox().height === 0) {
@@ -452,6 +433,10 @@ class MenuBar extends React.Component {
             callback();
             this.props.onRequestCloseAbout();
         };
+    }
+
+    handleDisconnected (args) {
+        this.props.onDisconnect(args.deviceId);
     }
     render () {
         const saveNowMessage = (
@@ -670,6 +655,16 @@ class MenuBar extends React.Component {
                         </MenuBarMenu>
                     </div>
                     <Divider className={classNames(styles.divider)} />
+                    {Object.values(this.props.devices).map(device => (
+                        <DeviceMenu
+                            key={device.deviceId}
+                            deviceId={device.deviceId}
+                            iconURL={device.iconURL}
+                            name={device.name}
+                            peripheralName={device.peripheralName}
+                            type={device.type}
+                        />
+                    ))}
                     <div
                         className={classNames(styles.menuBarItem, styles.hoverable)}
                         onMouseUp={this.handleSelectDeviceMouseUp}
@@ -678,46 +673,13 @@ class MenuBar extends React.Component {
                             className={styles.deviceIcon}
                             src={deviceIcon}
                         />
-                        {
-                            this.props.deviceName ? (
-                                <div>
-                                    {this.props.deviceName}
-                                </div>
-                            ) : (
-                                <FormattedMessage
-                                    defaultMessage="No device selected"
-                                    description="Text for menubar no device select button"
-                                    id="gui.menuBar.noDeviceSelected"
-                                />
-                            )}
+                        <FormattedMessage
+                            defaultMessage="Connect new device"
+                            description="Connect new device"
+                            id="gui.menuBar.connectNewDevice"
+                        />
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    <div
-                        className={classNames(styles.menuBarItem, styles.hoverable)}
-                        onMouseUp={this.handleConnectionMouseUp}
-                    >
-                        {this.props.peripheralName ? (
-                            <React.Fragment>
-                                <img
-                                    className={styles.connectedIcon}
-                                    src={connectedIcon}
-                                />
-                                {this.props.peripheralName}
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                <img
-                                    className={styles.unconnectedIcon}
-                                    src={unconnectedIcon}
-                                />
-                                <FormattedMessage
-                                    defaultMessage="Unconnected"
-                                    description="Text for menubar unconnected button"
-                                    id="gui.menuBar.noConnection"
-                                />
-                            </React.Fragment>
-                        )}
-                    </div>
                     {/* <div
                         className={classNames(styles.menuBarItem)}
                     >
@@ -809,24 +771,7 @@ class MenuBar extends React.Component {
                         />
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    <div
-                        className={classNames(styles.menuBarItem, this.props.isRealtimeMode &&
-                            this.props.peripheralName ? styles.hoverable : styles.disabled)}
-                        onMouseUp={this.props.isRealtimeMode && this.props.peripheralName ?
-                            this.handleUploadFirmware : null}
-                    >
-                        <img
-                            alt="UploadFirmware"
-                            className={classNames(styles.uploadFirmwareLogo)}
-                            draggable={false}
-                            src={uploadFirmwareIcon}
-                        />
-                        <FormattedMessage
-                            defaultMessage="Upload firmware"
-                            description="Button to upload the realtime firmware"
-                            id="gui.menuBar.uploadFirmware"
-                        />
-                    </div>
+
                     <Divider className={classNames(styles.divider)} />
                     <div className={classNames(styles.menuBarItem, styles.programModeGroup)}>
                         <Switch
@@ -970,7 +915,6 @@ MenuBar.propTypes = {
     onClickClearCache: PropTypes.func,
     onClickInstallDriver: PropTypes.func,
     onLogOut: PropTypes.func,
-    onNoPeripheralIsConnected: PropTypes.func.isRequired,
     onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
     onProjectTelemetryEvent: PropTypes.func,
@@ -997,19 +941,15 @@ MenuBar.propTypes = {
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     vm: PropTypes.instanceOf(VM).isRequired,
     onSetUploadMode: PropTypes.func,
-    onSetRealtimeConnection: PropTypes.func.isRequired,
     onSetRealtimeMode: PropTypes.func,
     onSetUpdate: PropTypes.func.isRequired,
-    onOpenConnectionModal: PropTypes.func,
-    onOpenUploadProgress: PropTypes.func,
     peripheralName: PropTypes.string,
     onDisconnect: PropTypes.func.isRequired,
     onWorkspaceIsEmpty: PropTypes.func.isRequired,
     onWorkspaceIsNotEmpty: PropTypes.func.isRequired,
     onOpenDeviceLibrary: PropTypes.func,
     onSetStageLarge: PropTypes.func.isRequired,
-    deviceId: PropTypes.string,
-    deviceName: PropTypes.string,
+    devices: PropTypes.objectOf(PropTypes.object),
     onDeviceIsEmpty: PropTypes.func
 };
 
@@ -1044,9 +984,7 @@ const mapStateToProps = (state, ownProps) => {
             (ownProps.authorUsername === user.username),
         stageSizeMode: state.scratchGui.stageSize.stageSize,
         vm: state.scratchGui.vm,
-        peripheralName: state.scratchGui.connectionModal.peripheralName,
-        deviceId: state.scratchGui.device.deviceId,
-        deviceName: state.scratchGui.device.deviceName
+        devices: state.scratchGui.devices
     };
 };
 
@@ -1076,12 +1014,10 @@ const mapDispatchToProps = dispatch => ({
         dispatch(setUploadMode());
         dispatch(setRealtimeConnection(false));
     },
-    onSetRealtimeConnection: state => dispatch(setRealtimeConnection(state)),
     onSetRealtimeMode: () => dispatch(setRealtimeMode()),
     onSetStageLarge: () => dispatch(setStageSize(STAGE_SIZE_MODES.large)),
-    onOpenConnectionModal: () => dispatch(openConnectionModal()),
-    onOpenUploadProgress: () => dispatch(openUploadProgress()),
-    onDisconnect: () => {
+    onDisconnect: deviceId => {
+        dispatch(clearPeripheralName(deviceId));
         dispatch(clearConnectionModalPeripheralName());
         dispatch(setRealtimeConnection(false));
     },
@@ -1089,7 +1025,6 @@ const mapDispatchToProps = dispatch => ({
         dispatch(setUpdate(message));
         dispatch(openUpdateModal());
     },
-    onNoPeripheralIsConnected: () => showAlertWithTimeout(dispatch, 'connectAPeripheralFirst'),
     onWorkspaceIsEmpty: () => showAlertWithTimeout(dispatch, 'workspaceIsEmpty'),
     onWorkspaceIsNotEmpty: () => showAlertWithTimeout(dispatch, 'workspaceIsNotEmpty'),
     onOpenDeviceLibrary: () => dispatch(openDeviceLibrary()),
