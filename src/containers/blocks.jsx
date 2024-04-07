@@ -29,8 +29,15 @@ import {closeExtensionLibrary, openSoundRecorder, openConnectionModal, closeDevi
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
 import {updateMetrics} from '../reducers/workspace-metrics';
 import {setCodeEditorValue} from '../reducers/code';
-import {setDeviceId, setDeviceName, setDeviceType} from '../reducers/device';
-import {addDevice} from '../reducers/devices';
+import {
+    clearDeviceId,
+    clearDeviceName,
+    clearDeviceType,
+    setDeviceId,
+    setDeviceName,
+    setDeviceType
+} from '../reducers/device';
+import {addDevice, removeDevice} from '../reducers/devices';
 import {setSupportSwitchMode} from '../reducers/program-mode';
 import {setBaudrate} from '../reducers/hardware-console';
 
@@ -564,7 +571,7 @@ class Blocks extends React.Component {
     }
     handleScratchExtensionRemoved (extensionInfo) {
         if (extensionInfo && extensionInfo.deviceId) {
-            this.props.onDeviceSelected(null);
+            this.props.onDeviceRemoved(extensionInfo.deviceId);
             this.props.vm.runtime.setRealtimeMode(true);
             this.props.onSetSupportSwitchMode(false);
         }
@@ -719,6 +726,7 @@ class Blocks extends React.Component {
             isVisible,
             onActivateColorPicker,
             onDeviceSelected,
+            onDeviceRemoved,
             onOpenConnectionModal,
             onOpenSoundRecorder,
             onToolboxWillUpdate,
@@ -810,6 +818,7 @@ Blocks.propTypes = {
     onActivateCustomProcedures: PropTypes.func,
     onCodeEditorIsUnlocked: PropTypes.func,
     onDeviceSelected: PropTypes.func,
+    onDeviceRemoved: PropTypes.func,
     onOpenConnectionModal: PropTypes.func,
     onOpenSoundRecorder: PropTypes.func,
     onToolboxWillUpdate: PropTypes.func,
@@ -912,6 +921,12 @@ const mapDispatchToProps = dispatch => ({
         dispatch(setDeviceId(device.deviceId));
         dispatch(setDeviceName(device.name));
         dispatch(setDeviceType(device.type));
+    },
+    onDeviceRemoved: deviceId => {
+        dispatch(removeDevice(deviceId));
+        dispatch(clearDeviceId());
+        dispatch(clearDeviceName());
+        dispatch(clearDeviceType());
     },
     onOpenConnectionModal: () => {
         dispatch(openConnectionModal());
