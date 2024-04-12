@@ -663,6 +663,7 @@ class MenuBar extends React.Component {
                             name={device.name}
                             peripheralName={device.peripheralName}
                             type={device.type}
+                            monitoring={device.monitoring}
                         />
                     ))}
                     <div

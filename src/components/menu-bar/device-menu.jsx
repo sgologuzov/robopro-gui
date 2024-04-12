@@ -25,18 +25,24 @@ import {openConnectionModal, openUploadProgress} from '../../reducers/modals';
 import {showAlertWithTimeout} from '../../reducers/alerts';
 import bindAll from 'lodash.bindall';
 import {setDeviceId, setDeviceName, setDeviceType} from '../../reducers/device';
+import {toggleMonitoring} from '../../reducers/devices';
 
 class DeviceMenu extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
             'handleConnectionMouseUp',
+            'handleMonitoringMouseUp',
             'handleUploadFirmware'
         ]);
     }
 
     handleConnectionMouseUp () {
         this.props.onOpenConnectionModal();
+    }
+
+    handleMonitoringMouseUp () {
+        this.props.onToggleMonitoring();
     }
 
     handleUploadFirmware () {
@@ -54,7 +60,8 @@ class DeviceMenu extends React.Component {
             deviceId,
             iconURL,
             name,
-            peripheralName
+            peripheralName,
+            monitoring
         } = this.props;
         return (
             <div
@@ -83,16 +90,25 @@ class DeviceMenu extends React.Component {
                             <div
                                 className={classNames(styles.menuBarItem, this.props.isRealtimeMode &&
                                 this.props.peripheralName ? styles.hoverable : styles.disabled)}
+                                onMouseUp={this.handleMonitoringMouseUp}
                             >
                                 <img
                                     className={styles.deviceIcon}
                                     src={deviceIcon}
                                 />
-                                <FormattedMessage
-                                    defaultMessage="Monitoring"
-                                    description="Pin value monitoring"
-                                    id="gui.deviceMenu.monitoring"
-                                />
+                                {monitoring ? (
+                                    <FormattedMessage
+                                        defaultMessage="Monitoring off"
+                                        description="Pin value monitoring off"
+                                        id="gui.deviceMenu.monitoringOff"
+                                    />
+                                ) : (
+                                    <FormattedMessage
+                                        defaultMessage="Monitoring on"
+                                        description="Pin value monitoring on"
+                                        id="gui.deviceMenu.monitoringOn"
+                                    />
+                                )}
                             </div>
                         </MenuItem>
                         <MenuItem>
@@ -156,6 +172,7 @@ DeviceMenu.propTypes = {
     isRealtimeMode: PropTypes.bool.isRequired,
     isRtl: PropTypes.bool,
     menuOpen: PropTypes.bool,
+    monitoring: PropTypes.bool,
     name: PropTypes.string,
     onClickMenu: PropTypes.func,
     onNoPeripheralIsConnected: PropTypes.func.isRequired,
@@ -163,6 +180,7 @@ DeviceMenu.propTypes = {
     onOpenUploadProgress: PropTypes.func,
     onRequestCloseMenu: PropTypes.func,
     onSetRealtimeConnection: PropTypes.func.isRequired,
+    onToggleMonitoring: PropTypes.func,
     peripheralName: PropTypes.string,
     // eslint-disable-next-line react/no-unused-prop-types
     type: PropTypes.string,
@@ -192,7 +210,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         dispatch(openUploadProgress());
     },
     onRequestCloseMenu: () => dispatch(closeDeviceMenu(ownProps.deviceId)),
-    onSetRealtimeConnection: state => dispatch(setRealtimeConnection(state))
+    onSetRealtimeConnection: state => dispatch(setRealtimeConnection(state)),
+    onToggleMonitoring: () => dispatch(toggleMonitoring(ownProps.deviceId))
 });
 
 export default connect(
