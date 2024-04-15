@@ -26,6 +26,7 @@ import {showAlertWithTimeout} from '../../reducers/alerts';
 import bindAll from 'lodash.bindall';
 import {setDeviceId, setDeviceName, setDeviceType} from '../../reducers/device';
 import {toggleMonitoring} from '../../reducers/devices';
+import {STAGE_SIZE_MODES} from "../../lib/layout-constants";
 
 class DeviceMenu extends React.Component {
     constructor (props) {
@@ -42,7 +43,12 @@ class DeviceMenu extends React.Component {
     }
 
     handleMonitoringMouseUp () {
-        this.props.onToggleMonitoring();
+        const deviceId = this.props.device.deviceId;
+        if (this.props.device.monitoring) {
+            this.props.vm.disablePeripheralMonitoring(deviceId);
+        } else {
+            this.props.vm.enablePeripheralMonitoring(deviceId);
+        }
     }
 
     handleUploadFirmware () {
@@ -61,7 +67,7 @@ class DeviceMenu extends React.Component {
             iconURL,
             name,
             peripheralName,
-            monitoring
+            device
         } = this.props;
         return (
             <div
@@ -96,7 +102,7 @@ class DeviceMenu extends React.Component {
                                     className={styles.deviceIcon}
                                     src={deviceIcon}
                                 />
-                                {monitoring ? (
+                                {device.monitoring ? (
                                     <FormattedMessage
                                         defaultMessage="Monitoring off"
                                         description="Pin value monitoring off"
@@ -167,6 +173,7 @@ class DeviceMenu extends React.Component {
 }
 
 DeviceMenu.propTypes = {
+    device: PropTypes.object,
     deviceId: PropTypes.string,
     iconURL: PropTypes.string,
     isRealtimeMode: PropTypes.bool.isRequired,

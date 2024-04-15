@@ -20,7 +20,7 @@ const MapMonitor = ({draggable, label, width, height, value, onResizeMouseDown, 
             <MapMonitorScroller
                 draggable={draggable}
                 height={height}
-                values={value}
+                value={value}
                 width={width}
                 {...rowProps}
             />
@@ -38,7 +38,7 @@ const MapMonitor = ({draggable, label, width, height, value, onResizeMouseDown, 
                     description="Length label on list monitors. DO NOT translate {length} (with brackets)."
                     id="gui.monitor.listMonitor.listLength"
                     values={{
-                        length: value.length
+                        length: value.size
                     }}
                 />
             </div>
@@ -61,14 +61,7 @@ MapMonitor.propTypes = {
     onActivate: PropTypes.func,
     onAdd: PropTypes.func,
     onResizeMouseDown: PropTypes.func,
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-        PropTypes.arrayOf(PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]))
-    ]),
+    value: PropTypes.instanceOf(Map),
     width: PropTypes.number
 };
 

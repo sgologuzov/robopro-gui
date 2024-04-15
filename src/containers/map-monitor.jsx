@@ -45,10 +45,7 @@ MapMonitor.propTypes = {
     height: PropTypes.number,
     id: PropTypes.string,
     targetId: PropTypes.string,
-    value: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string
-    ]),
+    value: PropTypes.instanceOf(Map),
     vm: PropTypes.instanceOf(VM),
     width: PropTypes.number,
     x: PropTypes.number,
