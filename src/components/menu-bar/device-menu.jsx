@@ -25,8 +25,6 @@ import {openConnectionModal, openUploadProgress} from '../../reducers/modals';
 import {showAlertWithTimeout} from '../../reducers/alerts';
 import bindAll from 'lodash.bindall';
 import {setDeviceId, setDeviceName, setDeviceType} from '../../reducers/device';
-import {toggleMonitoring} from '../../reducers/devices';
-import {STAGE_SIZE_MODES} from "../../lib/layout-constants";
 
 class DeviceMenu extends React.Component {
     constructor (props) {
@@ -187,7 +185,6 @@ DeviceMenu.propTypes = {
     onOpenUploadProgress: PropTypes.func,
     onRequestCloseMenu: PropTypes.func,
     onSetRealtimeConnection: PropTypes.func.isRequired,
-    onToggleMonitoring: PropTypes.func,
     peripheralName: PropTypes.string,
     // eslint-disable-next-line react/no-unused-prop-types
     type: PropTypes.string,
@@ -217,8 +214,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         dispatch(openUploadProgress());
     },
     onRequestCloseMenu: () => dispatch(closeDeviceMenu(ownProps.deviceId)),
-    onSetRealtimeConnection: state => dispatch(setRealtimeConnection(state)),
-    onToggleMonitoring: () => dispatch(toggleMonitoring(ownProps.deviceId))
+    onSetRealtimeConnection: state => dispatch(setRealtimeConnection(state))
 });
 
 export default connect(
