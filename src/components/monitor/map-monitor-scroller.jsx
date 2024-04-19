@@ -6,6 +6,7 @@ import {FormattedMessage} from 'react-intl';
 
 import styles from './monitor.css';
 import {List} from 'react-virtualized';
+import {Map} from 'immutable';
 
 class MapMonitorScroller extends React.Component {
     constructor (props) {

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import {FormattedMessage} from 'react-intl';
 import styles from './monitor.css';
 import MapMonitorScroller from './map-monitor-scroller.jsx';
+import {Map} from 'immutable';
 
 const MapMonitor = ({draggable, label, width, height, value, onResizeMouseDown, onAdd, ...rowProps}) => (
     <div

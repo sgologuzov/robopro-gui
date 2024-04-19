@@ -29,10 +29,8 @@ const reducer = function (state, action) {
         return newState;
     }
     case UPDATE_MONITORING: {
-        console.log('[UPDATE_MONITORING] action:', action);
         const device = action.device;
         newState[device.deviceId].monitoring = device.monitoring;
-        console.log('[UPDATE_MONITORING] newState:', newState);
         return newState;
     }
     default:
