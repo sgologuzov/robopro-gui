@@ -1,6 +1,6 @@
 {
   "name": "robopro-gui",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "GraphicaL User Interface for creating and running RoboPro projects",
   "author": "Massachusetts Institute of Technology",
   "license": "BSD-3-Clause",
