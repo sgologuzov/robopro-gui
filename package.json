@@ -1,6 +1,6 @@
 {
   "name": "robopro-gui",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "GraphicaL User Interface for creating and running RoboPro projects",
   "author": "Massachusetts Institute of Technology",
   "license": "BSD-3-Clause",
@@ -86,7 +86,7 @@
     "redux": "3.7.2",
     "redux-throttle": "0.1.1",
     "robopro-blocks": "^0.1.1",
-    "robopro-vm": "^0.2.1",
+    "robopro-vm": "^0.2.2",
     "scratch-audio": "0.1.0-prerelease.20200528195344",
     "scratch-paint": "2.2.14",
     "scratch-render": "0.1.0-prerelease.20211028200436",
