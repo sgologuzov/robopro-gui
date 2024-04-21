@@ -187,7 +187,7 @@ class Monitor extends React.Component {
         const monitorProps = monitorAdapter(this.props);
         const showSliderOption = availableModes(this.props.opcode).indexOf('slider') !== -1;
         const isList = this.props.mode === 'list';
-        const isMap = this.props.mode === 'map';
+        const isObject = this.props.mode === 'object';
         return (
             <React.Fragment>
                 {this.state.sliderPrompt && <SliderPrompt
@@ -212,8 +212,8 @@ class Monitor extends React.Component {
                     onExport={isList ? this.handleExport : null}
                     onImport={isList ? this.handleImport : null}
                     onNextMode={this.handleNextMode}
-                    onSetModeToDefault={isList || isMap ? null : this.handleSetModeToDefault}
-                    onSetModeToLarge={isList || isMap ? null : this.handleSetModeToLarge}
+                    onSetModeToDefault={isList || isObject ? null : this.handleSetModeToDefault}
+                    onSetModeToLarge={isList || isObject ? null : this.handleSetModeToLarge}
                     onSetModeToSlider={showSliderOption ? this.handleSetModeToSlider : null}
                     onSliderPromptOpen={this.handleSliderPromptOpen}
                 />
@@ -231,7 +231,7 @@ Monitor.propTypes = {
     isDiscrete: PropTypes.bool,
     max: PropTypes.number,
     min: PropTypes.number,
-    mode: PropTypes.oneOf(['default', 'slider', 'large', 'list', 'map']),
+    mode: PropTypes.oneOf(['default', 'slider', 'large', 'list', 'object']),
     monitorLayout: PropTypes.shape({
         monitors: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         savedMonitorPositions: PropTypes.object // eslint-disable-line react/forbid-prop-types
@@ -250,7 +250,10 @@ Monitor.propTypes = {
             PropTypes.string,
             PropTypes.number
         ])),
-        PropTypes.instanceOf(Map)
+        PropTypes.oneOfType([
+            PropTypes.objectOf(PropTypes.number),
+            PropTypes.objectOf(PropTypes.string)
+        ])
     ]), // eslint-disable-line react/no-unused-prop-types
     vm: PropTypes.instanceOf(VM),
     width: PropTypes.number,

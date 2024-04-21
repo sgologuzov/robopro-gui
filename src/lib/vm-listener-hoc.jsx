@@ -190,6 +190,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 onShowDeviceAlert,
                 onShowDeviceRealtimeAlert,
                 onClearDeviceRealtimeAlert,
+                onUpdateDeviceMonitoring,
                 onSetDeviceData,
                 /* eslint-enable no-unused-vars */
                 ...props

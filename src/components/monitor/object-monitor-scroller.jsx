@@ -6,9 +6,8 @@ import {FormattedMessage} from 'react-intl';
 
 import styles from './monitor.css';
 import {List} from 'react-virtualized';
-import {Map} from 'immutable';
 
-class MapMonitorScroller extends React.Component {
+class ObjectMonitorScroller extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -32,15 +31,15 @@ class MapMonitorScroller extends React.Component {
         );
     }
     rowRenderer ({index, key, style}) {
-        const entries = Array.from(this.props.value.entries());
-        const entry = entries[index];
+        const valueKeys = Object.keys(this.props.values);
+        const valueKey = valueKeys[index];
         return (
             <div
                 className={styles.listRow}
                 key={key}
                 style={style}
             >
-                <div className={styles.listIndex}>{entry[0]}</div>
+                <div className={styles.listIndex}>{valueKey}</div>
                 <div
                     className={styles.listValue}
                     dataIndex={index}
@@ -70,14 +69,14 @@ class MapMonitorScroller extends React.Component {
                         </div>
 
                     ) : (
-                        <div className={styles.valueInner}>{entry[1]}</div>
+                        <div className={styles.valueInner}>{this.props.values[valueKey]}</div>
                     )}
                 </div>
             </div>
         );
     }
     render () {
-        const {height, value, width, activeIndex, activeValue} = this.props;
+        const {height, values, width, activeIndex, activeValue} = this.props;
         // Keep the active index in view if defined, else must be undefined for List component
         const scrollToIndex = activeIndex === null ? undefined : activeIndex; /* eslint-disable-line no-undefined */
         return (
@@ -86,17 +85,18 @@ class MapMonitorScroller extends React.Component {
                 activeValue={activeValue}
                 height={(height) - 44 /* Header/footer size, approx */}
                 noRowsRenderer={this.noRowsRenderer}
-                rowCount={value.size}
+                rowCount={Object.keys(values).length}
                 rowHeight={24 /* Row size is same for all rows */}
                 rowRenderer={this.rowRenderer}
                 scrollToIndex={scrollToIndex} /* eslint-disable-line no-undefined */
+                values={values}
                 width={width}
             />
         );
     }
 }
 
-MapMonitorScroller.propTypes = {
+ObjectMonitorScroller.propTypes = {
     activeIndex: PropTypes.number,
     activeValue: PropTypes.string,
     categoryColor: PropTypes.string,
@@ -108,7 +108,10 @@ MapMonitorScroller.propTypes = {
     onInput: PropTypes.func,
     onKeyPress: PropTypes.func,
     onRemove: PropTypes.func,
-    value: PropTypes.instanceOf(Map),
+    values: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.number),
+        PropTypes.objectOf(PropTypes.string)
+    ]),
     width: PropTypes.number
 };
-export default MapMonitorScroller;
+export default ObjectMonitorScroller;

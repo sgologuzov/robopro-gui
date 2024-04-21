@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {FormattedMessage} from 'react-intl';
 import styles from './monitor.css';
-import MapMonitorScroller from './map-monitor-scroller.jsx';
-import {Map} from 'immutable';
+import ObjectMonitorScroller from './object-monitor-scroller.jsx';
 
-const MapMonitor = ({draggable, label, width, height, value, onResizeMouseDown, onAdd, ...rowProps}) => (
+const ObjectMonitor = ({draggable, label, width, height, value, onResizeMouseDown, onAdd, ...rowProps}) => (
     <div
         className={styles.listMonitor}
         style={{
@@ -18,10 +17,10 @@ const MapMonitor = ({draggable, label, width, height, value, onResizeMouseDown, 
             {label}
         </div>
         <div className={styles.listBody}>
-            <MapMonitorScroller
+            <ObjectMonitorScroller
                 draggable={draggable}
                 height={height}
-                value={value}
+                values={value}
                 width={width}
                 {...rowProps}
             />
@@ -39,7 +38,7 @@ const MapMonitor = ({draggable, label, width, height, value, onResizeMouseDown, 
                     description="Length label on list monitors. DO NOT translate {length} (with brackets)."
                     id="gui.monitor.listMonitor.listLength"
                     values={{
-                        length: value.size
+                        length: Object.keys(value).length
                     }}
                 />
             </div>
@@ -53,7 +52,7 @@ const MapMonitor = ({draggable, label, width, height, value, onResizeMouseDown, 
     </div>
 );
 
-MapMonitor.propTypes = {
+ObjectMonitor.propTypes = {
     activeIndex: PropTypes.number,
     categoryColor: PropTypes.string.isRequired,
     draggable: PropTypes.bool.isRequired,
@@ -62,13 +61,16 @@ MapMonitor.propTypes = {
     onActivate: PropTypes.func,
     onAdd: PropTypes.func,
     onResizeMouseDown: PropTypes.func,
-    value: PropTypes.instanceOf(Map),
+    value: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.number),
+        PropTypes.objectOf(PropTypes.string)
+    ]),
     width: PropTypes.number
 };
 
-MapMonitor.defaultProps = {
+ObjectMonitor.defaultProps = {
     width: 110,
     height: 200
 };
 
-export default MapMonitor;
+export default ObjectMonitor;

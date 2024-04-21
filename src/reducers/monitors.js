@@ -14,7 +14,6 @@ const reducer = function (state, action) {
 };
 
 const updateMonitors = function (monitors) {
-    // console.log('[updateMonitors], monitors:', monitors);
     return {
         type: UPDATE_MONITORS,
         monitors: monitors,

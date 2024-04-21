@@ -10,7 +10,7 @@ import DefaultMonitor from './default-monitor.jsx';
 import LargeMonitor from './large-monitor.jsx';
 import SliderMonitor from '../../containers/slider-monitor.jsx';
 import ListMonitor from '../../containers/list-monitor.jsx';
-import MapMonitor from '../../containers/map-monitor.jsx';
+import ObjectMonitor from '../../containers/object-monitor.jsx';
 
 import styles from './monitor.css';
 
@@ -29,7 +29,7 @@ const modes = {
     large: LargeMonitor,
     slider: SliderMonitor,
     list: ListMonitor,
-    map: MapMonitor
+    object: ObjectMonitor
 };
 
 const MonitorComponent = props => (
