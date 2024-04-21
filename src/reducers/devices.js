@@ -2,6 +2,7 @@ const ADD_DEVICE = 'scratch-gui/devices/add';
 const SET_PERIPHERAL_NAME = 'scratch-gui/devices/setPeripheralName';
 const CLEAR_PERIPHERAL_NAME = 'scratch-gui/devices/clearPeripheralName';
 const REMOVE_DEVICE = 'scratch-gui/devices/remove';
+const UPDATE_MONITORING = 'scratch-gui/devices/monitoring';
 
 const initialState = {
 };
@@ -25,6 +26,11 @@ const reducer = function (state, action) {
     }
     case REMOVE_DEVICE: {
         delete newState[action.deviceId];
+        return newState;
+    }
+    case UPDATE_MONITORING: {
+        const device = action.device;
+        newState[device.deviceId].monitoring = device.monitoring;
         return newState;
     }
     default:
@@ -62,11 +68,19 @@ const removeDevice = function (deviceId) {
     };
 };
 
+const updateMonitoring = function (device) {
+    return {
+        type: UPDATE_MONITORING,
+        device: device
+    };
+};
+
 export {
     reducer as default,
     initialState as devicesInitialState,
     addDevice,
     clearPeripheralName,
     removeDevice,
-    setPeripheralName
+    setPeripheralName,
+    updateMonitoring
 };

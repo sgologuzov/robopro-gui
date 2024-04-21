@@ -31,12 +31,22 @@ class DeviceMenu extends React.Component {
         super(props);
         bindAll(this, [
             'handleConnectionMouseUp',
+            'handleMonitoringMouseUp',
             'handleUploadFirmware'
         ]);
     }
 
     handleConnectionMouseUp () {
         this.props.onOpenConnectionModal();
+    }
+
+    handleMonitoringMouseUp () {
+        const deviceId = this.props.device.deviceId;
+        if (this.props.device.monitoring) {
+            this.props.vm.disablePeripheralMonitoring(deviceId);
+        } else {
+            this.props.vm.enablePeripheralMonitoring(deviceId);
+        }
     }
 
     handleUploadFirmware () {
@@ -54,7 +64,8 @@ class DeviceMenu extends React.Component {
             deviceId,
             iconURL,
             name,
-            peripheralName
+            peripheralName,
+            device
         } = this.props;
         return (
             <div
@@ -83,16 +94,25 @@ class DeviceMenu extends React.Component {
                             <div
                                 className={classNames(styles.menuBarItem, this.props.isRealtimeMode &&
                                 this.props.peripheralName ? styles.hoverable : styles.disabled)}
+                                onMouseUp={this.handleMonitoringMouseUp}
                             >
                                 <img
                                     className={styles.deviceIcon}
                                     src={deviceIcon}
                                 />
-                                <FormattedMessage
-                                    defaultMessage="Monitoring"
-                                    description="Pin value monitoring"
-                                    id="gui.deviceMenu.monitoring"
-                                />
+                                {device.monitoring ? (
+                                    <FormattedMessage
+                                        defaultMessage="Monitoring off"
+                                        description="Pin value monitoring off"
+                                        id="gui.deviceMenu.monitoringOff"
+                                    />
+                                ) : (
+                                    <FormattedMessage
+                                        defaultMessage="Monitoring on"
+                                        description="Pin value monitoring on"
+                                        id="gui.deviceMenu.monitoringOn"
+                                    />
+                                )}
                             </div>
                         </MenuItem>
                         <MenuItem>
@@ -151,11 +171,13 @@ class DeviceMenu extends React.Component {
 }
 
 DeviceMenu.propTypes = {
+    device: PropTypes.object,
     deviceId: PropTypes.string,
     iconURL: PropTypes.string,
     isRealtimeMode: PropTypes.bool.isRequired,
     isRtl: PropTypes.bool,
     menuOpen: PropTypes.bool,
+    monitoring: PropTypes.bool,
     name: PropTypes.string,
     onClickMenu: PropTypes.func,
     onNoPeripheralIsConnected: PropTypes.func.isRequired,

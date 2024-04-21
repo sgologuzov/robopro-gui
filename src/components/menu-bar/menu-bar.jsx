@@ -658,11 +658,13 @@ class MenuBar extends React.Component {
                     {Object.values(this.props.devices).map(device => (
                         <DeviceMenu
                             key={device.deviceId}
+                            device={device}
                             deviceId={device.deviceId}
                             iconURL={device.iconURL}
                             name={device.name}
                             peripheralName={device.peripheralName}
                             type={device.type}
+                            monitoring={device.monitoring}
                         />
                     ))}
                     <div

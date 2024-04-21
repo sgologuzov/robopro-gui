@@ -16,6 +16,7 @@ import {updateMicIndicator} from '../reducers/mic-indicator';
 import {setDeviceData} from '../reducers/device-data';
 
 import {makeDeviceLibrary} from '../lib/libraries/devices/index.jsx';
+import {updateMonitoring} from "../reducers/devices";
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -32,6 +33,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleProjectChanged',
                 'handleTargetsUpdate',
                 'handleDeviceAlert',
+                'handleDeviceMonitoringUpdate',
                 'handleDeviceRealtimeAlert',
                 'handleDeviceRealtimeSuccess'
             ]);
@@ -52,6 +54,7 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('RUNTIME_STARTED', this.props.onRuntimeStarted);
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
             this.props.vm.on('PERIPHERAL_CONNECTION_LOST_ERROR', this.handleDeviceAlert);
+            this.props.vm.on('PERIPHERAL_MONITORING_UPDATE', this.handleDeviceMonitoringUpdate);
             this.props.vm.on('PERIPHERAL_REALTIME_CONNECTION_LOST_ERROR', this.handleDeviceRealtimeAlert);
             this.props.vm.on('PERIPHERAL_REALTIME_CONNECT_SUCCESS', this.handleDeviceRealtimeSuccess);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
@@ -138,6 +141,13 @@ const vmListenerHOC = function (WrappedComponent) {
                 this.props.onShowDeviceAlert(device);
             }
         }
+        handleDeviceMonitoringUpdate (data) {
+            const device = this.props.deviceData.find(dev => dev.deviceId === data.deviceId);
+            if (device) {
+                device.monitoring = data.monitoring;
+                this.props.onUpdateDeviceMonitoring(device);
+            }
+        }
         handleDeviceRealtimeAlert (data) {
             const device = this.props.deviceData.find(dev => dev.deviceId === data.deviceId);
             device.message = data.message;
@@ -180,6 +190,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 onShowDeviceAlert,
                 onShowDeviceRealtimeAlert,
                 onClearDeviceRealtimeAlert,
+                onUpdateDeviceMonitoring,
                 onSetDeviceData,
                 /* eslint-enable no-unused-vars */
                 ...props
@@ -206,6 +217,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onShowDeviceAlert: PropTypes.func.isRequired,
         onShowDeviceRealtimeAlert: PropTypes.func.isRequired,
         onClearDeviceRealtimeAlert: PropTypes.func.isRequired,
+        onUpdateDeviceMonitoring: PropTypes.func.isRequired,
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
@@ -257,6 +269,9 @@ const vmListenerHOC = function (WrappedComponent) {
         },
         onClearDeviceRealtimeAlert: device => {
             dispatch(clearDeviceRealtimeAlert(device));
+        },
+        onUpdateDeviceMonitoring: device => {
+            dispatch(updateMonitoring(device));
         },
         onSetDeviceData: data => dispatch(setDeviceData(data)),
         onSetRealtimeConnection: state => {
