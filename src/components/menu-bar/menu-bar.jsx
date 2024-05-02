@@ -655,18 +655,21 @@ class MenuBar extends React.Component {
                         </MenuBarMenu>
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    {Object.values(this.props.devices).map(device => (
-                        <DeviceMenu
-                            key={device.deviceId}
-                            device={device}
-                            deviceId={device.deviceId}
-                            iconURL={device.iconURL}
-                            name={device.name}
-                            peripheralName={device.peripheralName}
-                            type={device.type}
-                            monitoring={device.monitoring}
-                        />
-                    ))}
+                    {Object.values(this.props.devices).map(device => {
+                        const dev = this.props.deviceData.find(item => item.deviceId === device.deviceId);
+                        return (
+                            <DeviceMenu
+                                key={dev.deviceId}
+                                device={dev}
+                                deviceId={dev.deviceId}
+                                iconURL={dev.iconURL}
+                                name={dev.name}
+                                peripheralName={device.peripheralName}
+                                type={dev.type}
+                                monitoring={device.monitoring}
+                            />
+                        );
+                    })}
                     <div
                         className={classNames(styles.menuBarItem, styles.hoverable)}
                         onMouseUp={this.handleSelectDeviceMouseUp}
@@ -951,6 +954,7 @@ MenuBar.propTypes = {
     onWorkspaceIsNotEmpty: PropTypes.func.isRequired,
     onOpenDeviceLibrary: PropTypes.func,
     onSetStageLarge: PropTypes.func.isRequired,
+    deviceData: PropTypes.instanceOf(Array).isRequired,
     devices: PropTypes.objectOf(PropTypes.object),
     onDeviceIsEmpty: PropTypes.func
 };
@@ -986,6 +990,7 @@ const mapStateToProps = (state, ownProps) => {
             (ownProps.authorUsername === user.username),
         stageSizeMode: state.scratchGui.stageSize.stageSize,
         vm: state.scratchGui.vm,
+        deviceData: state.scratchGui.deviceData.deviceData,
         devices: state.scratchGui.devices
     };
 };

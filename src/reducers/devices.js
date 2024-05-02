@@ -5,6 +5,8 @@ const REMOVE_DEVICE = 'scratch-gui/devices/remove';
 const UPDATE_MONITORING = 'scratch-gui/devices/monitoring';
 
 const initialState = {
+    roboProBot: {deviceId: 'roboProBot', monitoring: false},
+    roboProStation: {deviceId: 'roboProStation', monitoring: false}
 };
 
 const reducer = function (state, action) {
