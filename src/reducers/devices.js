@@ -17,11 +17,15 @@ const reducer = function (state, action) {
         return newState;
     }
     case SET_PERIPHERAL_NAME: {
-        newState[action.deviceId].peripheralName = action.peripheralName;
+        if (newState[action.deviceId]) {
+            newState[action.deviceId].peripheralName = action.peripheralName;
+        }
         return newState;
     }
     case CLEAR_PERIPHERAL_NAME: {
-        delete newState[action.deviceId].peripheralName;
+        if (newState[action.deviceId]) {
+            delete newState[action.deviceId].peripheralName;
+        }
         return newState;
     }
     case REMOVE_DEVICE: {
@@ -30,7 +34,9 @@ const reducer = function (state, action) {
     }
     case UPDATE_MONITORING: {
         const device = action.device;
-        newState[device.deviceId].monitoring = device.monitoring;
+        if (newState[action.deviceId]) {
+            newState[device.deviceId].monitoring = device.monitoring;
+        }
         return newState;
     }
     default:

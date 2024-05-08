@@ -20,6 +20,7 @@ import deviceIcon from './icon--device.svg';
 import unconnectedIcon from './icon--unconnected.svg';
 import connectedIcon from './icon--connected.svg';
 import uploadFirmwareIcon from './icon--upload-firmware.svg';
+import deleteIcon from './icon--delete.svg';
 import {setRealtimeConnection} from '../../reducers/connection-modal';
 import {openConnectionModal, openUploadProgress} from '../../reducers/modals';
 import {showAlertWithTimeout} from '../../reducers/alerts';
@@ -32,7 +33,8 @@ class DeviceMenu extends React.Component {
         bindAll(this, [
             'handleConnectionMouseUp',
             'handleMonitoringMouseUp',
-            'handleUploadFirmware'
+            'handleUploadFirmware',
+            'handleRemoveDevice'
         ]);
     }
 
@@ -54,6 +56,14 @@ class DeviceMenu extends React.Component {
             this.props.vm.uploadFirmwareToPeripheral(this.props.deviceId);
             this.props.onSetRealtimeConnection(false);
             this.props.onOpenUploadProgress();
+        } else {
+            this.props.onNoPeripheralIsConnected();
+        }
+    }
+
+    handleRemoveDevice () {
+        if (this.props.deviceId) {
+            this.props.vm.removeDevice(this.props.deviceId);
         } else {
             this.props.onNoPeripheralIsConnected();
         }
@@ -160,6 +170,24 @@ class DeviceMenu extends React.Component {
                                     defaultMessage="Upload firmware"
                                     description="Button to upload the realtime firmware"
                                     id="gui.menuBar.uploadFirmware"
+                                />
+                            </div>
+                        </MenuItem>
+                        <MenuItem>
+                            <div
+                                className={classNames(styles.menuBarItem, styles.hoverable)}
+                                onMouseUp={this.handleRemoveDevice}
+                            >
+                                <img
+                                    alt="Remove device"
+                                    className={classNames(styles.uploadFirmwareLogo)}
+                                    draggable={false}
+                                    src={deleteIcon}
+                                />
+                                <FormattedMessage
+                                    defaultMessage="Remove device"
+                                    description="Button to remove device"
+                                    id="gui.menuBar.removeDevice"
                                 />
                             </div>
                         </MenuItem>
