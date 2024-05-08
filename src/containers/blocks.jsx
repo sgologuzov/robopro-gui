@@ -419,8 +419,10 @@ class Blocks extends React.Component {
             const targetCostumes = target.getCostumes();
             const targetSounds = target.getSounds();
             const dynamicBlocksXML = this.props.vm.runtime.getBlocksXML(target);
+            const deviceDataList = Object.values(this.props.devices).map(
+                device => this.props.deviceData.find(ext => ext.deviceId === device.deviceId));
 
-            return makeToolboxXML(false, this.props.devices, target.isStage, target.id, dynamicBlocksXML,
+            return makeToolboxXML(false, deviceDataList, target.isStage, target.id, dynamicBlocksXML,
                 this.props.isRealtimeMode,
                 targetCostumes[targetCostumes.length - 1].name,
                 stageCostumes[stageCostumes.length - 1].name,
