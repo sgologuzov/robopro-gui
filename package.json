@@ -86,7 +86,7 @@
     "redux": "3.7.2",
     "redux-throttle": "0.1.1",
     "robopro-blocks": "^0.1.1",
-    "robopro-vm": "^0.2.3",
+    "robopro-vm": "^0.2.4",
     "scratch-audio": "0.1.0-prerelease.20200528195344",
     "scratch-paint": "2.2.14",
     "scratch-render": "0.1.0-prerelease.20211028200436",
