@@ -108,28 +108,6 @@ const projectData = translateFunction => {
                 rotationStyle: 'all around'
             }
         ],
-        devices: [
-            {
-                deviceId: 'roboProBot',
-                type: 'arduino',
-                pnpIdList: [
-                    // Arduino UNO
-                    'USB\\VID_2341&PID_0043',
-                    // For chinese clones that use CH340
-                    'USB\\VID_1A86&PID_7523'
-                ]
-            },
-            {
-                deviceId: 'roboProStation',
-                type: 'arduino',
-                pnpIdList: [
-                    // Arduino UNO
-                    'USB\\VID_2341&PID_0043',
-                    // For chinese clones that use CH340
-                    'USB\\VID_1A86&PID_7523'
-                ]
-            }
-        ],
         meta: {
             semver: '3.0.0',
             vm: '0.1.0',
