@@ -93,23 +93,23 @@ const deviceData = [
         tags: ['realtime']
     },
     {
-        name: 'roboPro Bot',
+        name: 'RoboPro Bot',
         deviceId: 'roboProBot',
-        manufactor: 'arduino.cc',
+        manufactor: 'RoboPro',
         learnMore: 'https://store.arduino.cc/usa/arduino-uno-rev3',
         type: DeviceType.arduino,
         iconURL: roboProBotIconURL,
         description: (
             <FormattedMessage
-                defaultMessage="A great board to get started with electronics and coding."
-                description="Description for the Arduino Uno device"
-                id="gui.device.arduinoUno.description"
+                defaultMessage="Bot"
+                description="Description for the RoboPro Bot device"
+                id="gui.device.roboProBot.description"
             />
         ),
         featured: true,
         disabled: false,
-        bluetoothRequired: true,
-        serialportRequired: false,
+        bluetoothRequired: false,
+        serialportRequired: true,
         defaultBaudRate: '9600',
         internetConnectionRequired: false,
         launchPeripheralConnectionFlow: true,
@@ -130,17 +130,17 @@ const deviceData = [
         helpLink: 'https://store.arduino.cc/usa/arduino-uno-rev3'
     },
     {
-        name: 'roboPro Station',
+        name: 'RoboPro Station',
         deviceId: 'roboProStation',
-        manufactor: 'arduino.cc',
+        manufactor: 'RoboPro',
         learnMore: 'https://store.arduino.cc/usa/arduino-uno-rev3',
         type: DeviceType.arduino,
         iconURL: roboProStationIconURL,
         description: (
             <FormattedMessage
-                defaultMessage="A great board to get started with electronics and coding."
+                defaultMessage="Control Station"
                 description="Description for the Arduino Uno device"
-                id="gui.device.arduinoUno.description"
+                id="gui.device.roboProStation.description"
             />
         ),
         featured: true,

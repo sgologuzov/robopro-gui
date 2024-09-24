@@ -92,7 +92,7 @@ import linkSocketIcon from './icon--link-socket.svg'; // eslint-disable-line no-
 import communityIcon from './icon--community.svg';
 import wikiIcon from './icon--wiki.svg';
 
-import scratchLogo from './scratch-logo.svg';
+import roboProLogo from './robopro-logo.svg';
 
 import sharedMessages from '../../lib/shared-messages';
 
@@ -515,7 +515,7 @@ class MenuBar extends React.Component {
                     <div className={classNames(styles.menuBarItem)}>
                         <img
                             alt="RoboPro"
-                            className={classNames(styles.scratchLogo, {
+                            className={classNames(styles.roboProLogo, {
                                 [styles.clickable]: typeof this.props.onClickLogo !== 'undefined'
                             })}
                             draggable={false}
@@ -960,7 +960,7 @@ MenuBar.propTypes = {
 };
 
 MenuBar.defaultProps = {
-    logo: scratchLogo,
+    logo: roboProLogo,
     onShare: () => {}
 };
 

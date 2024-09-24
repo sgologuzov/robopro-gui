@@ -8,7 +8,7 @@ import localesReducer, {initLocale, localesInitialState} from '../reducers/local
 
 import {setPlayer, setFullScreen} from '../reducers/mode.js';
 
-import locales from 'openblock-l10n';
+import locales from 'robopro-l10n';
 import {detectLocale} from './detect-locale';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

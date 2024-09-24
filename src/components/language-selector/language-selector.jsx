@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import locales from 'openblock-l10n';
+import locales from 'robopro-l10n';
 import styles from './language-selector.css';
 
 // supported languages to exclude from the menu, but allow as a URL option
