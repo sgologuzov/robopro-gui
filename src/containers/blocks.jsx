@@ -919,7 +919,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateColorPicker: callback => dispatch(activateColorPicker(callback)),
     onActivateCustomProcedures: (data, callback) => dispatch(activateCustomProcedures(data, callback)),
     onDeviceSelected: device => {
-        dispatch(addDevice({deviceId: device.deviceId, monitoring: false}));
+        dispatch(addDevice({deviceId: device.deviceId, name: device.name, type: device.type, monitoring: false}));
         dispatch(setDeviceId(device.deviceId));
         dispatch(setDeviceName(device.name));
         dispatch(setDeviceType(device.type));
