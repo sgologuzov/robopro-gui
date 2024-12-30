@@ -67,11 +67,13 @@ const vmListenerHOC = function (WrappedComponent) {
             }
             this.props.vm.postIOData('userData', {username: this.props.username});
             // Update device list
+            /*
             this.props.vm.extensionManager.getDeviceList().then(data => {
                 if (data) {
                     this.props.onSetDeviceData(makeDeviceLibrary(data));
                 }
             });
+             */
         }
         componentDidUpdate (prevProps) {
             if (prevProps.username !== this.props.username) {
