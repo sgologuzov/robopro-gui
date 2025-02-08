@@ -806,12 +806,14 @@ class MenuBar extends React.Component {
                                 onRequestClose={this.props.onRequestCloseSetting}
                             >
                                 <MenuSection>
+                                    {/*
                                     <MenuItem
                                         isRtl={this.props.isRtl}
                                         onClick={this.handleCheckUpdate}
                                     >
                                         {checkUpdate}
                                     </MenuItem>
+                                    */}
                                     <MenuItem
                                         isRtl={this.props.isRtl}
                                         onClick={this.handleClearCache}

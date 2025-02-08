@@ -70,14 +70,14 @@ const onClickAbout = [
         />),
         onClick: () => log('Privacy Policy')
     },
-    {
+    {/*
         title: (<FormattedMessage
             defaultMessage="Data settings"
             description="Menu bar item for data settings"
             id="gui.menuBar.dataSettings"
         />),
         onClick: () => log('Data Settings')
-    }
+    */}
 ];
 
 const handleShowMessageBox = (type, message) => {
