@@ -44,10 +44,12 @@ class DeviceMenu extends React.Component {
 
     handleMonitoringMouseUp () {
         const deviceId = this.props.device.deviceId;
+        const type = this.props.device.type;
+        const opcode = `${type}_${deviceId}`;
         if (this.props.device.monitoring) {
-            this.props.vm.disablePeripheralMonitoring(deviceId);
+            this.props.vm.disablePeripheralMonitoring(opcode);
         } else {
-            this.props.vm.enablePeripheralMonitoring(deviceId);
+            this.props.vm.enablePeripheralMonitoring(opcode);
         }
     }
 

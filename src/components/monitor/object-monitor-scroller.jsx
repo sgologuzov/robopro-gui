@@ -33,13 +33,14 @@ class ObjectMonitorScroller extends React.Component {
     rowRenderer ({index, key, style}) {
         const valueKeys = Object.keys(this.props.values);
         const valueKey = valueKeys[index];
+        const data = this.props.values[valueKey]
         return (
             <div
                 className={styles.listRow}
                 key={key}
                 style={style}
             >
-                <div className={styles.listIndex}>{valueKey}</div>
+                <div className={styles.listIndex}>{data.description}</div>
                 <div
                     className={styles.listValue}
                     dataIndex={index}
@@ -69,7 +70,7 @@ class ObjectMonitorScroller extends React.Component {
                         </div>
 
                     ) : (
-                        <div className={styles.valueInner}>{this.props.values[valueKey]}</div>
+                        <div className={styles.valueInner}>{data.value}</div>
                     )}
                 </div>
             </div>

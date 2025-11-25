@@ -15,8 +15,8 @@ class ObjectMonitor extends React.Component {
         ]);
 
         this.state = {
-            width: props.width || 100,
-            height: props.height || 200
+            width: props.width || 180,
+            height: props.height || 270
         };
     }
 
